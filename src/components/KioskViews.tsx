@@ -473,6 +473,18 @@ export const PaperJamRecoveryView: React.FC<
 
   const steps = PAPER_JAM_SCRIPT.steps;
 
+  // Continuous fill of the threaded stage track: 3 gaps between 4 circles.
+  // intraStage = how far through the current stage's progress band we are.
+  const intraStage =
+    progress < 25
+      ? progress / 25
+      : progress < 55
+      ? (progress - 25) / 30
+      : progress < 85
+      ? (progress - 55) / 30
+      : (progress - 85) / 15;
+  const stageFillPct = Math.min(100, Math.max(0, ((activeStep - 1) + intraStage) / 3 * 100));
+
   useEffect(() => {
     // Speak Niki's calming reassurance to the guest (CONCERNED emotion).
     NikiSpeechService.shared.speak(PAPER_JAM_REASSURANCE, 'CONCERNED');
@@ -536,47 +548,59 @@ export const PaperJamRecoveryView: React.FC<
           {PAPER_JAM_SCRIPT.body}
         </p>
 
-        {/* Progress Bar */}
-        <div className="w-full max-w-md h-3 bg-black/30 rounded-full overflow-hidden mt-4 shadow-inner">
-          <div
-            className="h-full bg-gradient-to-r from-amber-400 via-teal-300 to-emerald-400 transition-all duration-150 ease-out rounded-full shadow-[0_0_12px_#fbbf24]"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-
-        {/* Step-by-step indicator cards */}
-        <div className="mt-5 w-full grid grid-cols-2 gap-2 text-left k-enter k-d3">
-          {steps.map((st) => {
-            const isDone = activeStep > st.id || progress === 100;
-            const isCurrent = activeStep === st.id && progress < 100;
-
-            return (
+        {/* Stage stepper: 4 large circles with the progress bar threading
+            through them — one hover-free glance shows where recovery is */}
+        <div className="mt-2 w-full max-w-lg k-enter k-d3">
+          <div className="relative">
+            {/* Threaded track + fill, spanning circle centers */}
+            <div className="absolute top-7 sm:top-8 left-[12.5%] right-[12.5%] h-1.5 rounded-full bg-black/30 -translate-y-1/2">
               <div
-                key={st.id}
-                className={`p-2.5 rounded-lg border transition ${
-                  isCurrent
-                    ? 'bg-amber-400 border-amber-500 text-amber-950 shadow-lg'
-                    : isDone
-                    ? 'bg-[#02211f] border-emerald-500/60 text-emerald-200'
-                    : 'bg-[#013030] border-teal-800/60 text-teal-100/60'
-                }`}
-              >
-                <div className="flex items-center gap-1.5 font-bold mb-0.5">
-                  {isDone ? (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  ) : isCurrent ? (
-                    <RotateCcw className="w-3.5 h-3.5 text-amber-700 animate-spin shrink-0" />
-                  ) : (
-                    <span className="w-3.5 h-3.5 rounded-full border border-teal-700 flex items-center justify-center text-[9px] shrink-0">
-                      {st.id}
+                className="h-full rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24] transition-all duration-200 ease-out"
+                style={{ width: `${stageFillPct}%` }}
+              />
+            </div>
+
+            <div className="relative grid grid-cols-4">
+              {steps.map((st) => {
+                const isDone = activeStep > st.id || progress === 100;
+                const isCurrent = activeStep === st.id && progress < 100;
+
+                return (
+                  <div key={st.id} className="flex flex-col items-center gap-2">
+                    <div
+                      className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 flex items-center justify-center transition-colors duration-200 ${
+                        isDone
+                          ? 'bg-emerald-500 border-white text-white shadow-lg'
+                          : isCurrent
+                          ? 'bg-amber-400 border-white text-amber-950 shadow-[0_0_16px_rgba(251,191,36,0.6)] scale-105'
+                          : 'bg-[#013030] border-teal-700/70 text-teal-200/70'
+                      }`}
+                    >
+                      {isDone ? (
+                        <CheckCircle2 className="w-6 h-6 stroke-[2.5]" />
+                      ) : isCurrent ? (
+                        <RotateCcw className="w-6 h-6 animate-spin" />
+                      ) : (
+                        <span className="font-bold text-base sm:text-lg tabular-nums">{st.id}</span>
+                      )}
+                    </div>
+                    <span
+                      className={`text-[10px] sm:text-xs font-bold text-center leading-tight ${
+                        isCurrent ? 'text-amber-300' : isDone ? 'text-emerald-300' : 'text-white/60'
+                      }`}
+                    >
+                      {st.title}
                     </span>
-                  )}
-                  <span className="truncate">{st.title}</span>
-                </div>
-                <div className="text-[10px] opacity-80 truncate">{st.desc}</div>
-              </div>
-            );
-          })}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* What's happening right now, in a sentence */}
+          <p className="mt-3 text-center text-xs sm:text-sm text-teal-100/90 min-h-[2.5rem] px-2">
+            {steps[Math.min(activeStep, steps.length) - 1]?.desc}
+          </p>
         </div>
       </div>
 

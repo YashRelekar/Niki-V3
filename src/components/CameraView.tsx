@@ -296,7 +296,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
       <canvas ref={canvasRef} className="hidden" />
 
       {/* Centered camera window — small video-call frame, white outline */}
-      <div className="relative h-[min(46dvh,380px)] aspect-[4/3] max-w-[92%] rounded-2xl overflow-hidden border-4 border-white shadow-2xl bg-[#001314] k-enter k-d1">
+      <div className="relative h-[min(58dvh,500px)] aspect-[4/3] max-w-[94%] rounded-2xl overflow-hidden border-4 border-white shadow-2xl bg-[#001314] k-enter k-d1">
         <video
           ref={(el) => {
             videoRef.current = el;
