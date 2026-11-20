@@ -76,6 +76,20 @@
   background: rgba(0, 0, 0, 0.4);
 }
 
+/* Shutter countdown ring: one full sweep per second (re-keyed per digit) */
+@keyframes niki-ring {
+  from { stroke-dashoffset: 440; }
+  to   { stroke-dashoffset: 0; }
+}
+.k-ring { animation: niki-ring 1s linear both; }
+
+/* Shutter flash: quick fade-out over the preview frame */
+@keyframes niki-flash {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+.k-flash { animation: niki-flash 0.25s ease-out both; }
+
 /* ── Ambient state motion ── */@keyframes niki-breathe {
   0%, 100% { transform: scale(1); }
   50%      { transform: scale(1.03); }
@@ -108,7 +122,7 @@
 
 /* Respect Reduce Motion: all choreographed and ambient motion collapses. */
 @media (prefers-reduced-motion: reduce) {
-  .k-enter, .k-pop, .k-sheen, .k-draw, .flap-cell,
+  .k-enter, .k-pop, .k-sheen, .k-draw, .flap-cell, .k-ring,
   .animate-niki-breathe, .animate-niki-sweep,
   .animate-bounce, .animate-ping, .animate-pulse, .animate-spin {
     animation-duration: 0.01ms !important;

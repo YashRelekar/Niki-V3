@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Camera, Sparkles, ArrowRight, RotateCcw, Check, Image as ImageIcon } from 'lucide-react';
-import { ScrambleText } from './ScrambleText';
+import { Camera, ArrowLeft, ArrowRight, CameraOff } from 'lucide-react';
 
 interface CameraViewProps {
   onPhotoSubmitted: (dataUrl: string) => void;
@@ -9,6 +8,14 @@ interface CameraViewProps {
   onCancel?: () => void;
 }
 
+/**
+ * CameraView — redesigned capture stage.
+ *
+ * Solid Cathay-green slide; the live preview sits in a small, centered,
+ * white-outlined "video call" window instead of filling the screen.
+ * A dismissible instruction card explains the 3-second pose timer before
+ * the first shot. Control bar: Back (left) · Shutter (center) · Next (right).
+ */
 export const CameraView: React.FC<CameraViewProps> = ({
   onPhotoSubmitted,
   onFinishSession,
@@ -29,6 +36,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
   const [capturedPhotos, setCapturedPhotos] = useState<string[]>([]);
   const [lastShotFlash, setLastShotFlash] = useState(false);
   const [cameraError, setCameraError] = useState<string | null>(null);
+  const [showInstructions, setShowInstructions] = useState(true);
 
   const lastUUIDRef = useRef<string | undefined>(cameraUUID);
   const animFrameRef = useRef<number | null>(null);
@@ -243,7 +251,8 @@ export const CameraView: React.FC<CameraViewProps> = ({
     }, 400);
   }, [capturedPhotos.length, isCapturing, onPhotoSubmitted]);
 
-  // Countdown timer
+  // 3-second countdown, then capture. The digit + its ring are re-keyed each
+  // second, so the sweep restarts for every count: 3 sweeps, one per second.
   const triggerCountdownAndCapture = useCallback(() => {
     if (countdown !== null || isCapturing) return;
 
@@ -280,12 +289,14 @@ export const CameraView: React.FC<CameraViewProps> = ({
     onCancel?.();
   };
 
+  const isAnimating = countdown !== null || isCapturing;
+
   return (
-    <div className="relative w-full h-full flex flex-col items-center justify-between bg-black overflow-hidden select-none">
+    <div className="relative w-full h-full flex flex-col items-center justify-center gap-6 sm:gap-8 bg-[#006564] overflow-hidden select-none px-4">
       <canvas ref={canvasRef} className="hidden" />
 
-      {/* Camera Live Viewfinder Area */}
-      <div className="relative w-full flex-1 flex items-center justify-center overflow-hidden bg-slate-950">
+      {/* Centered camera window — small video-call frame, white outline */}
+      <div className="relative h-[min(46dvh,380px)] aspect-[4/3] max-w-[92%] rounded-2xl overflow-hidden border-4 border-white shadow-2xl bg-[#001314] k-enter k-d1">
         <video
           ref={(el) => {
             videoRef.current = el;
@@ -303,142 +314,141 @@ export const CameraView: React.FC<CameraViewProps> = ({
         />
 
         {!hasPermission && (
-          <div className="relative w-full h-full flex items-center justify-center">
-            <canvas ref={simCanvasRef} className="w-full h-full object-cover" />
-            <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-[#013030] border border-teal-800/80 text-teal-100 text-xs flex items-center gap-2 shadow-lg">
-              <Camera className="w-3.5 h-3.5" />
-              <span>Simulated Camera Viewfinder Active</span>
-            </div>
+          <canvas ref={simCanvasRef} className="w-full h-full object-cover" />
+        )}
+
+        {/* LIVE chip on the preview frame */}
+        {cameraError && !hasPermission ? (
+          <div className="absolute top-3 left-3 px-3 py-1.5 rounded-full bg-[#013030] border border-teal-800/80 text-teal-100 text-[10px] sm:text-xs font-semibold flex items-center gap-1.5 shadow-lg">
+            <CameraOff className="w-3.5 h-3.5 text-amber-300" />
+            <span>Simulated viewfinder</span>
+          </div>
+        ) : (
+          <div className="absolute top-3 left-3 px-3 py-1.5 rounded-full bg-[#001314] text-white text-[10px] sm:text-xs font-bold flex items-center gap-1.5 shadow-lg">
+            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <span>LIVE</span>
           </div>
         )}
 
+        {/* Framing crosshair */}
+        <div className="absolute inset-4 pointer-events-none border border-white/15 rounded-xl flex items-center justify-center">
+          <div className="w-10 h-10 border border-teal-400/40 rounded-full flex items-center justify-center">
+            <div className="w-1.5 h-1.5 bg-teal-400 rounded-full animate-ping" />
+          </div>
+        </div>
+
+        {/* Shutter flash */}
         {lastShotFlash && (
-          <div className="absolute inset-0 bg-white z-50 animate-out fade-out duration-300 pointer-events-none" />
+          <div className="absolute inset-0 bg-white z-40 pointer-events-none k-flash" />
         )}
 
+        {/* Countdown overlay: digit in a per-second sweep ring */}
         {countdown !== null && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 z-40 bg-black/50 backdrop-blur-sm">
-            <div className="relative flex items-center justify-center" key={countdown}>
-              {/* Attention halo — state change, one gentle pulse per digit */}
-              <span className="absolute w-32 h-32 rounded-full bg-white/10 animate-ping" />
-              <span className="relative text-9xl font-black text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)] tabular-nums k-pop">
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/50">
+            <div key={countdown} className="relative flex items-center justify-center">
+              <svg
+                className="absolute w-36 h-36 -rotate-90"
+                viewBox="0 0 160 160"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="80" cy="80" r="70" fill="none"
+                  stroke="rgba(255,255,255,0.2)" strokeWidth="6"
+                />
+                <circle
+                  cx="80" cy="80" r="70" fill="none"
+                  stroke="#2dd4bf" strokeWidth="6" strokeLinecap="round"
+                  strokeDasharray="440" strokeDashoffset="440"
+                  className="k-ring"
+                />
+              </svg>
+              <span className="relative text-8xl font-black text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)] tabular-nums k-pop">
                 {countdown}
               </span>
             </div>
-            <div className="px-5 py-2 rounded-full bg-[#013030] border border-teal-800/80 text-teal-100 text-sm font-bold shadow-lg">
-              <ScrambleText text="Say cheese!" />
-            </div>
           </div>
         )}
-
-        {/* Framing Crosshair Overlay */}
-        <div className="absolute inset-8 pointer-events-none border border-white/15 rounded-3xl flex items-center justify-center">
-          <div className="w-16 h-16 border border-teal-400/40 rounded-full flex items-center justify-center">
-            <div className="w-2 h-2 bg-teal-400 rounded-full animate-ping" />
-          </div>
-        </div>
-
-        {/* Top Info Banner */}
-        <div className="absolute top-4 inset-x-0 flex items-center justify-between px-6 z-30">
-          <div className="px-4 py-1.5 rounded-full bg-[#011b1b] text-white text-xs font-semibold flex items-center gap-2 border border-white/15 shadow-lg">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
-            <span>LIVE PREVIEW</span>
-          </div>
-
-          <div className="px-4 py-1.5 rounded-full bg-[#013030] text-teal-100 text-xs font-bold border border-teal-800/80 flex items-center gap-2 shadow-lg">
-            <ImageIcon className="w-3.5 h-3.5 text-teal-300" />
-            <span className="tabular-nums">{capturedPhotos.length} Photo{capturedPhotos.length === 1 ? '' : 's'} Taken</span>
-          </div>
-        </div>
       </div>
 
-      {/* Bottom Shutter & Multi-Photo Control Strip */}
-      <div className="w-full bg-[#001314] border-t border-teal-900/70 px-6 py-4 flex flex-col gap-3 z-30">
-        {capturedPhotos.length > 0 && (
-          <div className="flex items-center justify-between gap-4 py-1">
-            <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-1">
-              <span className="text-xs text-white/60 font-medium flex-shrink-0">
-                Session Photos:
-              </span>
-              {capturedPhotos.map((p, i) => (
-                <div
-                  key={i}
-                  className="relative w-12 h-10 rounded-lg overflow-hidden border-2 border-teal-400 flex-shrink-0 shadow-md group"
-                >
-                  <img src={p} alt={`Shot ${i + 1}`} className="w-full h-full object-cover" />
-                  <span className="absolute bottom-0.5 right-0.5 text-[9px] font-bold bg-black/80 px-1 rounded text-teal-300">
-                    #{i + 1}
-                  </span>
-                </div>
-              ))}
-            </div>
+      {/* Encouragement line once a shot exists */}
+      <div className="h-5 -mt-2 sm:-mt-3 text-white/85 text-xs sm:text-sm font-medium k-enter">
+        {capturedPhotos.length === 0
+          ? 'Ready when you are — press the shutter!'
+          : 'Saved! Take a few more, or tap Next to choose your favourite.'}
+      </div>
 
-            {/* Finish & Proceed to Selection Button */}
-            <button
-              onClick={handleFinish}
-              className="px-5 py-2.5 rounded-2xl bg-white hover:bg-white/95 active:scale-[0.97] text-[#006564] font-bold text-sm flex items-center gap-2 shadow-lg transition flex-shrink-0"
-            >
-              <span>Next: Review (<span className="tabular-nums">{capturedPhotos.length}</span>)</span>
-              <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-            </button>
-          </div>
-        )}
-
-        {/* Primary Controls Bar */}
-        <div className="flex items-center justify-between max-w-xl mx-auto w-full">
+      {/* Control bar: Back · Shutter · Next */}
+      <div className="w-full max-w-2xl grid grid-cols-3 items-center k-enter k-d2">
+        <div className="justify-self-start">
           <button
             onClick={handleCancel}
-            className="px-4 py-2 rounded-lg text-white/70 hover:text-white text-xs font-semibold hover:bg-white/10 transition"
+            disabled={isAnimating}
+            className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full bg-[#013030] border border-teal-800/80 text-teal-100 text-xs sm:text-sm font-semibold hover:bg-[#02403c] active:scale-[0.97] transition shadow-lg disabled:opacity-50"
           >
-            Cancel
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back</span>
           </button>
+        </div>
 
-          <div className="flex items-center gap-4">
-            <button
-              onClick={triggerCountdownAndCapture}
-              disabled={isCapturing}
-              className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-semibold flex items-center gap-1.5 transition active:scale-[0.97] disabled:opacity-50"
-              title="3-Second Timer"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-teal-300" />
-              <span>Timer (3s)</span>
-            </button>
+        <div className="justify-self-center">
+          <button
+            onClick={triggerCountdownAndCapture}
+            disabled={isAnimating}
+            aria-label="Take photo (3-second timer)"
+            className="group relative w-16 h-16 sm:w-20 sm:h-20 rounded-full border-4 border-white bg-white/20 hover:bg-white/40 active:scale-90 transition-all flex items-center justify-center shadow-2xl disabled:opacity-50 disabled:active:scale-100"
+          >
+            <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white transition-transform group-hover:scale-90 group-active:scale-75 shadow" />
+          </button>
+        </div>
 
-            <button
-              onClick={executeCapture}
-              disabled={isCapturing}
-              className="group relative w-18 h-18 rounded-full border-4 border-white bg-white/20 hover:bg-white/40 active:scale-90 transition-all flex items-center justify-center shadow-2xl disabled:opacity-50"
-              title="Capture Photo"
-            >
-              <div className="w-12 h-12 rounded-full bg-white transition-transform group-hover:scale-90 group-active:scale-75 shadow" />
-            </button>
-
-            {capturedPhotos.length > 0 && (
-              <button
-                onClick={executeCapture}
-                disabled={isCapturing}
-                className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 active:scale-[0.97] text-white border border-white/20 text-xs font-semibold flex items-center gap-1.5 transition"
-                title="Take Another Photo"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Take Another</span>
-              </button>
-            )}
-          </div>
-
-          {!hasPermission && (
-            <button
-              onClick={startCamera}
-              className="text-xs text-teal-400 hover:text-teal-300 underline underline-offset-4"
-              title="Retry WebCam"
-            >
-              Retry Camera
-            </button>
-          )}
-
-          {hasPermission && <div className="w-14" />}
+        <div className="justify-self-end">
+          <button
+            onClick={handleFinish}
+            disabled={capturedPhotos.length === 0 || isAnimating}
+            className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full bg-white text-[#006564] text-xs sm:text-sm font-bold hover:bg-white/95 active:scale-[0.97] transition shadow-lg disabled:opacity-50 disabled:hover:bg-white"
+          >
+            <span className="tabular-nums">
+              Next{capturedPhotos.length > 1 ? ` (${capturedPhotos.length})` : ''}
+            </span>
+            <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+          </button>
         </div>
       </div>
+
+      {/* Instruction modal — explains the pose timer, dismissible */}
+      {showInstructions && (
+        <div className="absolute inset-0 z-[60] flex items-center justify-center bg-[#002626]/95 p-6">
+          <div className="w-full max-w-md bg-white rounded-2xl p-6 sm:p-8 shadow-2xl k-pop">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-11 h-11 rounded-full bg-[#006564] flex items-center justify-center shrink-0">
+                <Camera className="w-5 h-5 text-white" />
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold text-[#013030] leading-tight">
+                How to take your photo
+              </h2>
+            </div>
+
+            <div className="space-y-3 text-[#013030]/90 text-sm sm:text-base leading-relaxed">
+              <p>
+                When you press the shutter, you'll have{' '}
+                <strong>3 seconds</strong> to step back and get into position
+                for the shot.
+              </p>
+              <p>
+                Take as many photos as you like — you'll{' '}
+                <strong>pick your favourite</strong> on the next screen.
+              </p>
+            </div>
+
+            <button
+              onClick={() => setShowInstructions(false)}
+              className="mt-6 w-full py-3.5 rounded-2xl bg-[#006564] text-white font-bold text-base sm:text-lg hover:bg-[#005554] active:scale-[0.97] transition shadow-lg"
+            >
+              Understood
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
