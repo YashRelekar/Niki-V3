@@ -49,8 +49,34 @@
   animation: niki-draw 0.45s 0.1s cubic-bezier(0.23, 1, 0.32, 1) both;
 }
 
-/* ── Ambient state motion ── */
-@keyframes niki-breathe {
+/* ── Split-flap departure board cell ── */
+/* Cell actually flips: incoming face rotates down from 90°, Solari-style.
+   Traveler first, then backdrop, so the flip reads as one moving flap. */
+@keyframes niki-flap {
+  0%   { transform: perspective(300px) rotateX(90deg); }
+  100% { transform: perspective(300px) rotateX(0deg); }
+}
+.flap-cell {
+  min-width: 1ch;
+  padding: 0.1em 0.22em 0.14em;
+  background: #013030;
+  border-radius: 3px;
+  color: #ccfbf1;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.45);
+  animation: niki-flap 0.22s cubic-bezier(0.23, 1, 0.32, 1) both;
+  backface-visibility: hidden;
+}
+.flap-cell::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* ── Ambient state motion ── */@keyframes niki-breathe {
   0%, 100% { transform: scale(1); }
   50%      { transform: scale(1.03); }
 }
@@ -82,7 +108,7 @@
 
 /* Respect Reduce Motion: all choreographed and ambient motion collapses. */
 @media (prefers-reduced-motion: reduce) {
-  .k-enter, .k-pop, .k-sheen, .k-draw,
+  .k-enter, .k-pop, .k-sheen, .k-draw, .flap-cell,
   .animate-niki-breathe, .animate-niki-sweep,
   .animate-bounce, .animate-ping, .animate-pulse, .animate-spin {
     animation-duration: 0.01ms !important;

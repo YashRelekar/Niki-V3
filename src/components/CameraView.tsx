@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Camera, Sparkles, ArrowRight, RotateCcw, Check, Image as ImageIcon } from 'lucide-react';
+import { ScrambleText } from './ScrambleText';
 
 interface CameraViewProps {
   onPhotoSubmitted: (dataUrl: string) => void;
@@ -325,7 +326,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
               </span>
             </div>
             <div className="px-5 py-2 rounded-full bg-[#013030] border border-teal-800/80 text-teal-100 text-sm font-bold shadow-lg">
-              Say cheese!
+              <ScrambleText text="Say cheese!" />
             </div>
           </div>
         )}

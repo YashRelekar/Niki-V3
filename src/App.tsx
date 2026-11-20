@@ -25,6 +25,7 @@ import {
   ThinkingView,
 } from './components/KioskViews';
 import { DevToggle } from './components/DevToggle';
+import { JourneyDots } from './components/JourneyDots';
 import { DevModeWorkspace } from './components/DevModeWorkspace';
 import { StorageManagerModal } from './components/StorageManagerModal';
 import { PWAInstallModal } from './components/PWAInstallModal';
@@ -250,6 +251,7 @@ export default function App() {
 
             {/* Kiosk Content Overlay */}
             <div className="relative z-10 w-full h-full flex flex-col">
+              <JourneyDots state={currentKioskState} />
               {renderKioskContent()}
             </div>
           </div>

@@ -12,6 +12,8 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { AirplaneSlider } from './AirplaneSlider';
+import { ScrambleText } from './ScrambleText';
+import { FlapBoard } from './FlapBoard';
 import { NikiSpeechService } from '../services/tts';
 import {
   IDLE_SCRIPT,
@@ -62,10 +64,10 @@ export const InitialView: React.FC<ViewProps & { onApproach?: () => void }> = ({
       className="w-full h-full flex flex-col items-center justify-center text-center p-6 sm:p-8 select-none cursor-pointer"
     >
       <h1 className="font-bold leading-tight drop-shadow-md text-3xl sm:text-4xl md:text-5xl lg:text-6xl k-enter">
-        {PRESENCE_SCRIPT.headline}
+        <ScrambleText text={PRESENCE_SCRIPT.headline} />
       </h1>
       <h2 className="mt-4 font-normal text-white/90 leading-tight text-2xl sm:text-3xl md:text-4xl lg:text-5xl k-enter k-d2">
-        {PRESENCE_SCRIPT.sub}
+        <ScrambleText text={PRESENCE_SCRIPT.sub} delay={160} />
       </h2>
       <div className="mt-8 flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#013030] border border-teal-800/80 text-teal-100 text-xs sm:text-sm shadow-lg k-enter k-d3">
         <Sparkles className="w-4 h-4 text-teal-300" />
@@ -110,11 +112,11 @@ export const InviteView: React.FC<InviteViewProps> = ({
       {/* Top Text Section with scaled, proportional typography */}
       <div className="space-y-3 sm:space-y-4 max-w-4xl">
         <h1 className="font-bold whitespace-pre-line leading-tight text-2xl sm:text-3xl md:text-4xl lg:text-[42px] drop-shadow-sm k-enter">
-          {welcomeText}
+          <ScrambleText text={welcomeText} />
         </h1>
 
         <h2 className="font-normal text-white/90 whitespace-pre-line leading-snug text-lg sm:text-xl md:text-2xl lg:text-[28px] k-enter k-d2">
-          {INVITE_SCRIPT.welcomeSub}
+          <ScrambleText text={INVITE_SCRIPT.welcomeSub} delay={160} />
         </h2>
       </div>
 
@@ -196,10 +198,13 @@ export const ImageSelectionView: React.FC<ImageSelectionViewProps> = ({
       {/* Header — information only; the action lives in the bottom bar */}
       <div className="space-y-1 k-enter">
         <h1 className="font-bold text-2xl sm:text-3xl md:text-4xl">
-          Choose your photo
+          <ScrambleText text="Choose your photo" />
         </h1>
         <p className="text-white/80 text-base sm:text-lg md:text-xl">
-          Tap a photo below to select it for souvenir printing.
+          <ScrambleText
+            text="Tap a photo below to select it for souvenir printing."
+            delay={120}
+          />
         </p>
       </div>
 
@@ -386,7 +391,7 @@ export const PrintingView: React.FC<
       ) : (
         <div className="space-y-1">
           <h1 className="font-bold drop-shadow text-3xl sm:text-4xl md:text-5xl text-white flex items-center justify-center gap-2">
-            <span>{PRINT_SUCCESS_SCRIPT.finishedHeadline}</span>
+            <ScrambleText text={PRINT_SUCCESS_SCRIPT.finishedHeadline} />
             <span className="text-3xl">🖨️✨</span>
           </h1>
           <p className="text-teal-100 text-base sm:text-lg font-medium">
@@ -408,9 +413,13 @@ export const PrintingView: React.FC<
       </div>
 
         {!isFinished && (
-          <p className="mt-3 text-teal-200/90 text-xs sm:text-sm font-medium">
-            {getStageDescription()}
-          </p>
+          <div className="mt-4">
+            <FlapBoard
+              text={getStageDescription()}
+              className="text-xs sm:text-sm font-bold tracking-wider"
+              cellClassName="text-teal-100"
+            />
+          </div>
         )}
 
       {/* Once Progress Completes: 2 Clear Options for the User */}
@@ -635,7 +644,7 @@ export const PrintSuccessView: React.FC<
       )}
 
       <h1 className="font-bold text-white drop-shadow text-3xl sm:text-4xl md:text-5xl lg:text-6xl k-enter k-d2">
-        {PRINT_SUCCESS_SCRIPT.headline}
+        <ScrambleText text={PRINT_SUCCESS_SCRIPT.headline} delay={180} />
       </h1>
       <p className="mt-3 text-white/90 text-base sm:text-lg md:text-xl font-medium k-enter k-d3">
         {PRINT_SUCCESS_SCRIPT.collectLine}
@@ -671,7 +680,7 @@ export const GoodbyeView: React.FC<ViewProps & { onComplete?: () => void }> = ({
       <div className="text-4xl sm:text-5xl mb-4 k-enter k-d1">{GOODBYE_SCRIPT.emoji}</div>
 
       <h1 className="font-bold text-white drop-shadow text-3xl sm:text-4xl md:text-5xl k-enter k-d2">
-        {GOODBYE_SCRIPT.headline}
+        <ScrambleText text={GOODBYE_SCRIPT.headline} delay={140} />
       </h1>
 
       <p className="mt-3 text-white/85 text-base sm:text-lg max-w-md k-enter k-d3">
