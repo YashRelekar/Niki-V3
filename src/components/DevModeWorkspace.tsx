@@ -11,7 +11,7 @@ import {
   Wifi,
   WifiOff,
   Database,
-  Code2,
+  Download,
   Layers,
   Monitor,
   Camera,
@@ -20,6 +20,7 @@ import {
   Image as ImageIcon,
   ChevronRight,
   RefreshCw,
+  LogOut,
 } from 'lucide-react';
 
 interface DevModeWorkspaceProps {
@@ -32,7 +33,8 @@ interface DevModeWorkspaceProps {
   onToggleTts: () => void;
   onOpenVoiceModal: () => void;
   onOpenStorageModal: () => void;
-  onOpenFlutterModal: () => void;
+  onOpenPWAModal: () => void;
+  onExitDevMode: () => void;
   photoCount: number;
   renderKioskContent: () => React.ReactNode;
   refreshPhotoCount: () => Promise<void>;
@@ -60,7 +62,8 @@ export const DevModeWorkspace: React.FC<DevModeWorkspaceProps> = ({
   onToggleTts,
   onOpenVoiceModal,
   onOpenStorageModal,
-  onOpenFlutterModal,
+  onOpenPWAModal,
+  onExitDevMode,
   photoCount,
   renderKioskContent,
   refreshPhotoCount,
@@ -207,14 +210,24 @@ export const DevModeWorkspace: React.FC<DevModeWorkspaceProps> = ({
             )}
           </button>
 
-          {/* Platform: Flutter Code Export Trigger */}
+          {/* Platform: PWA Install & Offline Readiness */}
           <button
-            onClick={onOpenFlutterModal}
+            onClick={onOpenPWAModal}
             className="px-2.5 py-1 rounded-xl bg-teal-600 hover:bg-teal-500 active:scale-95 text-white font-semibold text-xs flex items-center gap-1.5 shadow transition"
-            title="Inspect & Export Flutter Platform Source Code"
+            title="Install as standalone PWA & check offline readiness"
           >
-            <Code2 className="w-3 h-3" />
-            <span>Flutter (iOS & Android)</span>
+            <Download className="w-3 h-3" />
+            <span>PWA Install</span>
+          </button>
+
+          {/* Exit back to fullscreen flyer User Mode */}
+          <button
+            onClick={onExitDevMode}
+            className="px-2.5 py-1 rounded-xl bg-white hover:bg-white/90 active:scale-95 text-[#006564] font-bold text-xs flex items-center gap-1.5 shadow transition"
+            title="Exit Dev / User View"
+          >
+            <LogOut className="w-3 h-3" />
+            <span>User View</span>
           </button>
         </div>
       </div>
@@ -265,17 +278,17 @@ export const DevModeWorkspace: React.FC<DevModeWorkspaceProps> = ({
         )}
 
         {subView === 'split' && (
-          <div className="w-full h-full flex divide-x divide-teal-900/40 overflow-hidden min-h-0">
-            {/* Left: Kiosk Screen */}
-            <div className="flex-1 relative bg-[#006564] overflow-hidden flex flex-col">
+          <div className="w-full h-full flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-teal-900/40 overflow-hidden min-h-0 overflow-y-auto md:overflow-hidden">
+            {/* Left / Top: Kiosk Screen */}
+            <div className="flex-1 min-h-[360px] relative bg-[#006564] overflow-hidden flex flex-col">
               <MeteorBackground color="#ffffff" opacity={0.4} />
               <div className="relative z-10 w-full h-full flex flex-col">
                 {renderKioskContent()}
               </div>
             </div>
 
-            {/* Right: Admin Console */}
-            <div className="w-80 md:w-96 p-2 bg-slate-950/90 overflow-y-auto flex flex-col min-h-0">
+            {/* Right / Bottom: Admin Console */}
+            <div className="flex-1 p-2 bg-slate-950/90 overflow-y-auto flex flex-col min-h-0">
               <AdminConsole statePayload={backendState} />
             </div>
           </div>

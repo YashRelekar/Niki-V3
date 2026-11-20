@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import {
   Check,
-  Volume2,
-  VolumeX,
   Sparkles,
   Printer,
   ArrowRight,
@@ -15,6 +13,17 @@ import {
 } from 'lucide-react';
 import { AirplaneSlider } from './AirplaneSlider';
 import { NikiSpeechService } from '../services/tts';
+import {
+  IDLE_SCRIPT,
+  PRESENCE_SCRIPT,
+  INVITE_SCRIPT,
+  PRINTING_MONOLOGUE_LINES,
+  PRINTING_STAGE_SCRIPT,
+  PRINT_SUCCESS_SCRIPT,
+  PAPER_JAM_REASSURANCE,
+  PAPER_JAM_SCRIPT,
+  GOODBYE_SCRIPT,
+} from '../data/scripts';
 
 interface ViewProps {
   deviceIdiom?: 'pad' | 'phone';
@@ -33,10 +42,10 @@ export const IdleView: React.FC<ViewProps & { onWakeUp?: () => void }> = ({
       <div
         className="font-bold tracking-tight transition-transform hover:scale-105 duration-300 text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
       >
-        (ᴗ˳ᴗ)ᶻ𝗓𐰁 .ᐟ
+        {IDLE_SCRIPT.kaomoji}
       </div>
       <p className="mt-6 text-white/60 text-xs sm:text-sm md:text-base tracking-wider uppercase font-medium">
-        Kiosk Sleeping • Tap anywhere to wake
+        {IDLE_SCRIPT.status}
       </p>
     </div>
   );
@@ -53,14 +62,14 @@ export const InitialView: React.FC<ViewProps & { onApproach?: () => void }> = ({
       className="w-full h-full flex flex-col items-center justify-center text-center p-6 sm:p-8 select-none cursor-pointer"
     >
       <h1 className="font-bold leading-tight drop-shadow-md text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
-        Hello, flyer!
+        {PRESENCE_SCRIPT.headline}
       </h1>
       <h2 className="mt-4 font-normal text-white/90 leading-tight text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
-        Come closer!
+        {PRESENCE_SCRIPT.sub}
       </h2>
       <div className="mt-8 flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/80 text-xs sm:text-sm">
         <Sparkles className="w-4 h-4 text-teal-300" />
-        <span>Step forward or tap to interact</span>
+        <span>{PRESENCE_SCRIPT.cta}</span>
       </div>
     </div>
   );
@@ -79,8 +88,8 @@ interface InviteViewProps extends ViewProps {
 export const InviteView: React.FC<InviteViewProps> = ({
   name,
   welcomeText,
-  primaryActionTitle = "Let's start!",
-  secondaryActionTitle = 'No thanks',
+  primaryActionTitle = INVITE_SCRIPT.primaryButton,
+  secondaryActionTitle = INVITE_SCRIPT.secondaryButton,
   onPrimaryAction,
   onSecondaryAction,
   deviceIdiom = 'pad',
@@ -105,7 +114,7 @@ export const InviteView: React.FC<InviteViewProps> = ({
         </h1>
 
         <h2 className="font-normal text-white/90 whitespace-pre-line leading-snug text-lg sm:text-xl md:text-2xl lg:text-[28px]">
-          Welcome! {'\n'}Take a photo with me!
+          {INVITE_SCRIPT.welcomeSub}
         </h2>
       </div>
 
@@ -282,34 +291,15 @@ export const PrintingView: React.FC<
   const [progress, setProgress] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
   const [autoAdvanceRemaining, setAutoAdvanceRemaining] = useState(14);
-  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-
-  const toggleSpeech = () => {
-    if (isPlayingAudio) {
-      NikiSpeechService.shared.stop();
-      setIsPlayingAudio(false);
-    } else {
-      setIsPlayingAudio(true);
-      const text = `Hi! I’m Niki, your friendly little robot.
-You’re probably wondering how I can move, talk, see, and still look this cute.
-Well… it’s not magic — it’s some pretty cool technology!
-
-I use a Vision‑Language Model so I can see the world and chat with you about it.
-SLAM helps me walk around while building a map in my head at the same time.
-LoRAs let me add a fun, personal twist to every photo I create.
-
-And with MCP, all these abilities come together like my arms, legs, and tiny robot brain.
-
-Pretty cool, right? Let’s explore together!`;
-
-      NikiSpeechService.shared.speak(text, 'HAPPY', () => {
-        setIsPlayingAudio(false);
-      });
-    }
-  };
 
   useEffect(() => {
-    // Auto-progress print job over 4.2 seconds - audio is an explicit user choice, not auto-played
+    // TTS auto-starts immediately on mount when entering PRINT_PHOTO.
+    // The session is unlocked by the earlier user wake tap; there are NO
+    // user-facing playback controls — narration stops automatically when
+    // the guest moves on, the component unmounts, or the monologue completes.
+    NikiSpeechService.shared.speak(PRINTING_MONOLOGUE_LINES.join('\n'), 'HAPPY');
+
+    // Auto-progress print job over 4.2 seconds
     const startTime = Date.now();
     const duration = 4200;
     const interval = setInterval(() => {
@@ -348,9 +338,9 @@ Pretty cool, right? Let’s explore together!`;
 
   // Stage description based on print percentage
   const getStageDescription = () => {
-    if (progress < 30) return 'Optimizing souvenir resolution & colors...';
-    if (progress < 75) return 'Thermal printing souvenir postcard...';
-    if (progress < 100) return 'Finalizing glossy finish & dispensing...';
+    if (progress < 30) return PRINTING_STAGE_SCRIPT[0];
+    if (progress < 75) return PRINTING_STAGE_SCRIPT[1];
+    if (progress < 100) return PRINTING_STAGE_SCRIPT[2];
     return 'Souvenir photo dispensed in tray below.';
   };
 
@@ -385,11 +375,11 @@ Pretty cool, right? Let’s explore together!`;
       ) : (
         <div className="space-y-1">
           <h1 className="font-bold drop-shadow text-3xl sm:text-4xl md:text-5xl text-white flex items-center justify-center gap-2">
-            <span>Printing Finished!</span>
+            <span>{PRINT_SUCCESS_SCRIPT.finishedHeadline}</span>
             <span className="text-3xl">🖨️✨</span>
           </h1>
           <p className="text-teal-100 text-base sm:text-lg font-medium">
-            Please check the dispenser tray below for your printed souvenir.
+            {PRINT_SUCCESS_SCRIPT.trayLine}
           </p>
         </div>
       )}
@@ -412,33 +402,6 @@ Pretty cool, right? Let’s explore together!`;
             {getStageDescription()}
           </p>
 
-          {/* User Option for Niki's Technology Introduction Audio */}
-          <button
-            onClick={toggleSpeech}
-            type="button"
-            className={`mt-4 px-4 py-2 rounded-full border text-xs sm:text-sm font-semibold flex items-center gap-2.5 transition active:scale-95 shadow-lg backdrop-blur-sm cursor-pointer ${
-              isPlayingAudio
-                ? 'bg-teal-400/25 border-teal-200 text-teal-100 ring-2 ring-teal-300/40'
-                : 'bg-white/15 hover:bg-white/25 border-white/25 text-white/90 hover:text-white'
-            }`}
-          >
-            {isPlayingAudio ? (
-              <>
-                <VolumeX className="w-4 h-4 text-teal-200" />
-                <span>Niki is speaking • Tap to pause</span>
-                <span className="flex items-center gap-0.5 ml-1">
-                  <span className="w-1 h-3 bg-teal-300 rounded-full animate-pulse" />
-                  <span className="w-1 h-4 bg-teal-300 rounded-full animate-pulse delay-75" />
-                  <span className="w-1 h-2 bg-teal-300 rounded-full animate-pulse delay-150" />
-                </span>
-              </>
-            ) : (
-              <>
-                <Volume2 className="w-4 h-4 text-teal-300" />
-                <span>Hear Niki explain her technology</span>
-              </>
-            )}
-          </button>
         </>
       )}
 
@@ -497,19 +460,11 @@ export const PaperJamRecoveryView: React.FC<
   const [progress, setProgress] = useState(0);
   const [activeStep, setActiveStep] = useState(1);
 
-  const steps = [
-    { id: 1, title: 'Sensor Diagnostic', desc: 'Detecting dispenser paper position' },
-    { id: 2, title: 'Paper Retraction', desc: 'Gently retracting jammed sheet into clearance tray' },
-    { id: 3, title: 'Roller Calibration', desc: 'Cleaning feed rollers & realigning print ribbon' },
-    { id: 4, title: 'Thermal Reprint', desc: 'Dispensing fresh souvenir photo print' },
-  ];
+  const steps = PAPER_JAM_SCRIPT.steps;
 
   useEffect(() => {
-    // Speak calming reassurance to the guest
-    NikiSpeechService.shared.speak(
-      "Please hold on for just a second! I'm retracting the paper and preparing a fresh print for you right now.",
-      'CONCERNED'
-    );
+    // Speak Niki's calming reassurance to the guest (CONCERNED emotion).
+    NikiSpeechService.shared.speak(PAPER_JAM_REASSURANCE, 'CONCERNED');
 
     const startTime = Date.now();
     const duration = 6500; // 6.5s recovery process
@@ -541,7 +496,7 @@ export const PaperJamRecoveryView: React.FC<
         <div className="flex items-center gap-2.5">
           <div className="w-3 h-3 rounded-full bg-amber-400 animate-ping shrink-0" />
           <span className="text-xs sm:text-sm font-bold uppercase tracking-wider">
-            Printer Jam Detected • Auto-Recovery Active
+            {PAPER_JAM_SCRIPT.banner}
           </span>
         </div>
         <span className="text-xs font-mono bg-amber-900/60 text-amber-300 px-2 py-0.5 rounded-md">
@@ -563,11 +518,11 @@ export const PaperJamRecoveryView: React.FC<
         </div>
 
         <h1 className="font-bold text-white drop-shadow text-2xl sm:text-3xl md:text-4xl">
-          Hold on just a moment! ⚠️
+          {PAPER_JAM_SCRIPT.headline}
         </h1>
 
         <p className="mt-2 text-teal-100 text-sm sm:text-base max-w-md">
-          Please be patient while Niki gently retracts the stuck paper, clears the feed rollers, and automatically prints a fresh souvenir photo.
+          {PAPER_JAM_SCRIPT.body}
         </p>
 
         {/* Progress Bar */}
@@ -618,7 +573,7 @@ export const PaperJamRecoveryView: React.FC<
       <div className="w-full flex items-center justify-between pt-2 text-xs text-white/70">
         <span className="flex items-center gap-1.5">
           <Wrench className="w-3.5 h-3.5 text-teal-300" />
-          <span>Automatic paper jam clearing protocol</span>
+          <span>{PAPER_JAM_SCRIPT.footer}</span>
         </span>
 
         {onResolved && (
@@ -660,28 +615,28 @@ export const PrintSuccessView: React.FC<
       onClick={onFinish}
       className="w-full h-full flex flex-col items-center justify-center text-center p-6 sm:p-8 select-none cursor-pointer"
     >
-      <div className="text-4xl sm:text-5xl mb-3">🎉</div>
+      <div className="text-4xl sm:text-5xl mb-3">{PRINT_SUCCESS_SCRIPT.emoji}</div>
 
       {chosenPhoto && (
         <div className="relative mb-4 w-48 h-36 sm:w-60 sm:h-44 rounded-2xl overflow-hidden border-4 border-white shadow-2xl p-1 bg-white">
           <img src={chosenPhoto} alt="Souvenir photo" className="w-full h-full object-cover rounded-xl" />
           <div className="absolute bottom-2 inset-x-2 bg-[#006564]/95 py-1 text-[11px] font-bold text-white rounded shadow">
-            Cathay Pacific Souvenir
+            {PRINT_SUCCESS_SCRIPT.badge}
           </div>
         </div>
       )}
 
       <h1 className="font-bold text-white drop-shadow text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
-        Print success!
+        {PRINT_SUCCESS_SCRIPT.headline}
       </h1>
       <p className="mt-3 text-white/90 text-base sm:text-lg md:text-xl font-medium">
-        Please collect your souvenir print from the tray below.
+        {PRINT_SUCCESS_SCRIPT.collectLine}
       </p>
 
       <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 text-white/90 text-xs sm:text-sm border border-white/20">
-        <span>Returning to start in <strong>{secondsRemaining}s</strong></span>
+        <span>{PRINT_SUCCESS_SCRIPT.countdown} <strong>{secondsRemaining}s</strong></span>
         <span className="text-white/40">•</span>
-        <span className="text-white/70">Tap anywhere to finish now</span>
+        <span className="text-white/70">{PRINT_SUCCESS_SCRIPT.tapToFinish}</span>
       </div>
     </div>
   );
@@ -705,19 +660,19 @@ export const GoodbyeView: React.FC<ViewProps & { onComplete?: () => void }> = ({
       onClick={onComplete}
       className="w-full h-full flex flex-col items-center justify-center text-center p-6 sm:p-8 select-none cursor-pointer"
     >
-      <div className="text-4xl sm:text-5xl mb-4">✈️</div>
+      <div className="text-4xl sm:text-5xl mb-4">{GOODBYE_SCRIPT.emoji}</div>
 
       <h1 className="font-bold text-white drop-shadow text-3xl sm:text-4xl md:text-5xl">
-        Have a wonderful journey!
+        {GOODBYE_SCRIPT.headline}
       </h1>
 
       <p className="mt-3 text-white/85 text-base sm:text-lg max-w-md">
-        Thank you for visiting Cathay Pacific. Resetting kiosk for the next guest...
+        {GOODBYE_SCRIPT.body}
       </p>
 
       <div className="mt-8 flex items-center gap-3 text-white/60 text-xs sm:text-sm">
         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-        <span>Returning to home screen...</span>
+        <span>{GOODBYE_SCRIPT.footer}</span>
       </div>
     </div>
   );

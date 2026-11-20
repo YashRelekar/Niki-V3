@@ -1,11 +1,8 @@
 {
-  "name": "NIKI Kiosk & Admin - Cross-Platform Flutter Rebuild",
-  "description": "Recreation of the NIKI Photo Booth companion in Flutter for iOS and Android with offline local storage, camera capture, airplane slider, TTS audio, and complete codebase export.",
+  "name": "NIKI Photo Booth Kiosk",
+  "short_name": "NIKI Kiosk",
+  "description": "Cathay Pacific–themed robot photo-booth companion: capture, choose, and print a souvenir selfie with Niki. Offline-capable PWA with admin studio.",
   "requestFramePermissions": [
-    "camera",
-    "microphone"
-  ],
-  "majorCapabilities": [
-    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+    "camera"
   ]
 }

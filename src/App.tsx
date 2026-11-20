@@ -7,6 +7,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { backendService } from './services/backend';
 import { localStore } from './services/storage';
 import { NikiSpeechService } from './services/tts';
+import { buildInviteWelcome } from './data/scripts';
 import { BackendStatePayload, KioskStateType } from './types';
 
 // Components
@@ -23,10 +24,10 @@ import {
   GoodbyeView,
   ThinkingView,
 } from './components/KioskViews';
-import { UserDevSlider } from './components/UserDevSlider';
+import { DevToggle } from './components/DevToggle';
 import { DevModeWorkspace } from './components/DevModeWorkspace';
 import { StorageManagerModal } from './components/StorageManagerModal';
-import { FlutterExportModal } from './components/FlutterExportModal';
+import { PWAInstallModal } from './components/PWAInstallModal';
 import { VoiceSettingsModal } from './components/VoiceSettingsModal';
 
 export default function App() {
@@ -45,7 +46,7 @@ export default function App() {
 
   // Modals
   const [showStorageModal, setShowStorageModal] = useState(false);
-  const [showFlutterModal, setShowFlutterModal] = useState(false);
+  const [showPWAModal, setShowPWAModal] = useState(false);
   const [showVoiceModal, setShowVoiceModal] = useState(false);
 
   // Subscribe to backend state engine
@@ -89,7 +90,15 @@ export default function App() {
   };
 
   // Actions from Kiosk
+  const handleWakeUp = () => {
+    // Prime/unlock speechSynthesis within this explicit user gesture (iOS policy)
+    NikiSpeechService.shared.unlock();
+    backendService.transitionKioskState('DETECT_PRESENCE');
+  };
+
   const handlePrimaryInvite = () => {
+    // Re-prime the speech context on a primary CTA tap (autoplay policy safety)
+    NikiSpeechService.shared.unlock();
     backendService.handleUserInput('yes');
   };
 
@@ -117,7 +126,7 @@ export default function App() {
         return (
           <IdleView
             deviceIdiom="pad"
-            onWakeUp={() => backendService.transitionKioskState('DETECT_PRESENCE')}
+            onWakeUp={handleWakeUp}
           />
         );
       case 'DETECT_PRESENCE':
@@ -136,7 +145,7 @@ export default function App() {
             name={localStore.getSettings().demoName || 'Candbot'}
             welcomeText={
               backendState.niki_ui_state?.text ||
-              "The weather looks great today.\nWouldn't you want to take a picture?"
+              buildInviteWelcome(localStore.getSettings().demoName || 'Candbot')
             }
             onPrimaryAction={handlePrimaryInvite}
             onSecondaryAction={handleSecondaryInvite}
@@ -198,6 +207,8 @@ export default function App() {
             onComplete={async () => {
               await localStore.clearAllPhotos();
               await refreshPhotoCount();
+              // Stop any goodbye narration before returning to the sleeping kiosk
+              NikiSpeechService.shared.stop();
               backendService.transitionKioskState('IDLE');
             }}
           />
@@ -212,22 +223,24 @@ export default function App() {
         return (
           <IdleView
             deviceIdiom="pad"
-            onWakeUp={() => backendService.transitionKioskState('DETECT_PRESENCE')}
+            onWakeUp={handleWakeUp}
           />
         );
     }
   };
 
   return (
-    <div className="relative w-screen h-screen bg-[#001213] flex flex-col items-center justify-center p-3 sm:p-6 overflow-hidden font-sans">
-      {/* Top-Right Floating User / Dev Mode Slider */}
-      <UserDevSlider mode={previewMode} onChange={setPreviewMode} />
+    // Edge-to-edge fullscreen: mobile-first, no device bezel. Safe-area aware
+    // so it fills iPhone (notch/Dynamic Island), iPad, and Android edge-to-edge
+    // when launched from the Home Screen.
+    <div className="relative w-screen h-[100dvh] overflow-hidden bg-[#001213] flex flex-col select-none font-sans pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
+      {/* MODE 1: USER MODE — clean flyer kiosk experience */}
+      {previewMode === 'user' && (
+        <>
+          {/* Discreet corner Dev Mode toggle (staff only) */}
+          <DevToggle onEnterDev={() => setPreviewMode('dev')} />
 
-      {/* Main iPad Device Frame */}
-      <div className="relative w-full max-w-5xl h-full max-h-[760px] rounded-3xl border-8 border-slate-900 ring-2 ring-teal-700/50 shadow-2xl overflow-hidden bg-[#006564] flex flex-col">
-        {/* MODE 1: USER MODE (Clean Customer Kiosk Experience inside Frame) */}
-        {previewMode === 'user' && (
-          <div className="relative w-full h-full overflow-hidden flex flex-col">
+          <div className="relative w-full flex-1 min-h-0 overflow-hidden flex flex-col bg-[#006564]">
             {/* Cathay Canvas Meteor Shower Background */}
             <MeteorBackground color="#ffffff" opacity={0.4} />
 
@@ -236,10 +249,12 @@ export default function App() {
               {renderKioskContent()}
             </div>
           </div>
-        )}
+        </>
+      )}
 
-        {/* MODE 2: DEV MODE (Entire Frame interior is replaced by Developer & Admin Studio) */}
-        {previewMode === 'dev' && (
+      {/* MODE 2: DEV MODE (full Developer & Admin Studio) */}
+      {previewMode === 'dev' && (
+        <div className="w-full flex-1 min-h-0 flex flex-col">
           <DevModeWorkspace
             backendState={backendState}
             currentKioskState={currentKioskState}
@@ -250,13 +265,14 @@ export default function App() {
             onToggleTts={handleToggleTts}
             onOpenVoiceModal={() => setShowVoiceModal(true)}
             onOpenStorageModal={() => setShowStorageModal(true)}
-            onOpenFlutterModal={() => setShowFlutterModal(true)}
+            onOpenPWAModal={() => setShowPWAModal(true)}
+            onExitDevMode={() => setPreviewMode('user')}
             photoCount={photoCount}
             renderKioskContent={renderKioskContent}
             refreshPhotoCount={refreshPhotoCount}
           />
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Modals Accessible from Dev Mode */}
       <StorageManagerModal
@@ -267,9 +283,9 @@ export default function App() {
         }}
       />
 
-      <FlutterExportModal
-        isOpen={showFlutterModal}
-        onClose={() => setShowFlutterModal(false)}
+      <PWAInstallModal
+        isOpen={showPWAModal}
+        onClose={() => setShowPWAModal(false)}
       />
 
       <VoiceSettingsModal

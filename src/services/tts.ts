@@ -67,6 +67,12 @@ export class NikiSpeechService {
   private isSpeaking = false;
   private enabled = true;
 
+  // Monotonic session id: every playback run bumps it so stale utterance
+  // callbacks (iOS Safari fires `onend` on cancelled utterances) are ignored.
+  private sessionToken = 0;
+  // Becomes true after the first explicit user-gesture unlock.
+  private unlocked = false;
+
   // Customization
   private selectedVoiceURI: string | null = null;
   private basePitch = 1.45; // Distinctly feminine/bright pitch
@@ -108,6 +114,120 @@ export class NikiSpeechService {
     this.enabled = val;
     if (!val) {
       this.stop();
+    }
+  }
+
+  /**
+   * Prime/unlock `speechSynthesis` inside an explicit user tap handler.
+   * Mobile autoplay policies (especially iOS Safari) block synthesis until
+   * the first utterance is triggered from a user gesture — call this from the
+   * IDLE wake tap and every primary CTA tap.
+   */
+  public unlock() {
+    if (!this.synth) return;
+    this.unlocked = true;
+    try {
+      // Speak a silent, zero-length-ish utterance to prime the audio context.
+      const prime = new SpeechSynthesisUtterance(' ');
+      prime.volume = 0;
+      this.synth.speak(prime);
+      // Immediately cancel so nothing audible ever plays from the prime.
+      try { this.synth.cancel(); } catch { /* no-op */ }
+    } catch {
+      // Priming is best-effort; normal speak() paths will still attempt queueing.
+    }
+  }
+
+  /** Whether a user-gesture unlock has happened this session. */
+  public isUnlocked(): boolean {
+    return this.unlocked;
+  }
+
+  /**
+   * Split a script block into short, utterance-sized segments.
+   * Newlines are hard breaks; within a line, sentences are split on terminal
+   * punctuation so iOS Safari never chokes on long utterances.
+   */
+  private splitScript(text: string): string[] {
+    const segments: string[] = [];
+    for (const rawLine of text.split(/\r?\n/)) {
+      const line = rawLine.trim();
+      if (!line) continue;
+      const sentences = line.match(/[^.!?…]+[.!?…]+["')\]]*|[^.!?…]+$/g) || [line];
+      for (const s of sentences) {
+        const trimmed = s.trim();
+        if (trimmed) segments.push(trimmed);
+      }
+    }
+    return segments.length ? segments : [text.trim()];
+  }
+
+  /** Recursively queue the remaining segments for the current session. */
+  private speakSegment(
+    segments: string[],
+    index: number,
+    emotion: string | null,
+    sessionId: number,
+    onEnd?: () => void
+  ) {
+    if (!this.synth) return;
+    if (sessionId !== this.sessionToken) return; // superseded by a newer session
+    if (index >= segments.length) {
+      this.isSpeaking = false;
+      onEnd?.();
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(segments[index]);
+
+    // Emotion modulation on top of the feminine pitch/rate.
+    let pitchMod = this.basePitch;
+    let rateMod = this.baseRate;
+    const emo = (emotion || '').toUpperCase();
+    switch (emo) {
+      case 'HAPPY':
+        pitchMod = Math.min(2.0, this.basePitch * 1.15);
+        rateMod = this.baseRate * 1.05;
+        break;
+      case 'SAD':
+        pitchMod = Math.max(0.9, this.basePitch * 0.9);
+        rateMod = this.baseRate * 0.9;
+        break;
+      case 'CONFUSED':
+      case 'CONCERNED':
+        pitchMod = Math.min(2.0, this.basePitch * 1.1);
+        rateMod = this.baseRate * 1.02;
+        break;
+      default:
+        break;
+    }
+    utterance.pitch = pitchMod;
+    utterance.rate = rateMod;
+
+    const targetVoice = this.autoSelectBestFeminineVoice();
+    if (targetVoice) {
+      utterance.voice = targetVoice;
+    }
+
+    const advance = () => {
+      if (sessionId !== this.sessionToken) return;
+      // Tiny gap between segments keeps iOS Safari from stalling mid-queue.
+      setTimeout(() => this.speakSegment(segments, index + 1, emotion, sessionId, onEnd), 10);
+    };
+
+    utterance.onstart = () => {
+      if (sessionId === this.sessionToken) this.isSpeaking = true;
+    };
+    utterance.onend = advance;
+    utterance.onerror = advance;
+
+    try {
+      this.synth.speak(utterance);
+    } catch {
+      if (sessionId === this.sessionToken) {
+        this.isSpeaking = false;
+        onEnd?.();
+      }
     }
   }
 
@@ -263,61 +383,17 @@ export class NikiSpeechService {
       return;
     }
 
+    // Clean cancel + new session id so any in-flight utterance callbacks
+    // (cancelled utterances firing onend) can never corrupt this run.
+    this.sessionToken += 1;
+    const sessionId = this.sessionToken;
+
     try {
       this.synth.cancel();
+    } catch { /* no-op */ }
 
-      const utterance = new SpeechSynthesisUtterance(cleanText);
-
-      // Emotion modulation on top of feminine pitch
-      let pitchMod = this.basePitch;
-      let rateMod = this.baseRate;
-
-      const emo = (emotion || '').toUpperCase();
-      switch (emo) {
-        case 'HAPPY':
-          pitchMod = Math.min(2.0, this.basePitch * 1.15);
-          rateMod = this.baseRate * 1.05;
-          break;
-        case 'SAD':
-          pitchMod = Math.max(0.9, this.basePitch * 0.9);
-          rateMod = this.baseRate * 0.9;
-          break;
-        case 'CONFUSED':
-          pitchMod = Math.min(2.0, this.basePitch * 1.1);
-          rateMod = this.baseRate * 1.02;
-          break;
-        default:
-          break;
-      }
-
-      utterance.pitch = pitchMod;
-      utterance.rate = rateMod;
-
-      // Assign verified feminine voice
-      const targetVoice = this.autoSelectBestFeminineVoice();
-      if (targetVoice) {
-        utterance.voice = targetVoice;
-      }
-
-      utterance.onstart = () => {
-        this.isSpeaking = true;
-      };
-
-      utterance.onend = () => {
-        this.isSpeaking = false;
-        onEnd?.();
-      };
-
-      utterance.onerror = () => {
-        this.isSpeaking = false;
-        onEnd?.();
-      };
-
-      this.synth.speak(utterance);
-    } catch (e) {
-      console.warn('TTS playback issue:', e);
-      onEnd?.();
-    }
+    const segments = this.splitScript(cleanText);
+    this.speakSegment(segments, 0, emotion || null, sessionId, onEnd);
   }
 
   public testVoice(sampleText: string = "Hi! I'm Niki, your friendly Cathay Pacific photo companion! Ready to capture some beautiful memories?") {
@@ -325,6 +401,8 @@ export class NikiSpeechService {
   }
 
   public stop() {
+    // Invalidate the current session first so queued segment callbacks die.
+    this.sessionToken += 1;
     if (this.synth) {
       try {
         this.synth.cancel();
