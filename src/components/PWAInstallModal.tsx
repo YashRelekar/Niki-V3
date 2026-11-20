@@ -78,7 +78,7 @@ export const PWAInstallModal: React.FC<PWAInstallModalProps> = ({ isOpen, onClos
 
         <div className="p-5 space-y-4">
           {/* Installation Status */}
-          <div className="flex items-center justify-between p-3 rounded-xl bg-slate-950/70 border border-slate-800">
+          <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950/70 border border-slate-800">
             <span className="text-xs font-medium text-slate-300">Running mode</span>
             {isInstalled ? (
               <span className="flex items-center gap-1.5 text-xs font-bold text-emerald-300">
@@ -90,7 +90,7 @@ export const PWAInstallModal: React.FC<PWAInstallModalProps> = ({ isOpen, onClos
           </div>
 
           {/* Connectivity badge (subtle, non-intrusive) */}
-          <div className="flex items-center justify-between p-3 rounded-xl bg-slate-950/70 border border-slate-800">
+          <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950/70 border border-slate-800">
             <span className="text-xs font-medium text-slate-300">Connectivity</span>
             <span className={`text-xs font-semibold ${isOnline ? 'text-emerald-300' : 'text-slate-400'}`}>
               {isOnline ? 'Online' : 'Offline — using local simulator & cache'}
@@ -98,7 +98,7 @@ export const PWAInstallModal: React.FC<PWAInstallModalProps> = ({ isOpen, onClos
           </div>
 
           {/* Service Worker readiness */}
-          <div className="flex items-center justify-between p-3 rounded-xl bg-slate-950/70 border border-slate-800">
+          <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950/70 border border-slate-800">
             <span className="text-xs font-medium text-slate-300">Offline cache (Service Worker)</span>
             <span className={`text-xs font-semibold ${swReady === 'ready' ? 'text-emerald-300' : swReady === 'checking' ? 'text-teal-300' : 'text-amber-300'}`}>
               {swReady === 'ready' ? 'Active & caching' : swReady === 'checking' ? 'Checking…' : 'Not available'}
@@ -109,14 +109,14 @@ export const PWAInstallModal: React.FC<PWAInstallModalProps> = ({ isOpen, onClos
           {canInstall ? (
             <button
               onClick={async () => setInstallOutcome(await installApp())}
-              className="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-sm flex items-center justify-center gap-2 transition active:scale-95 shadow-lg"
+              className="w-full py-3 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-bold text-sm flex items-center justify-center gap-2 transition active:scale-95 shadow-lg"
             >
               <Download className="w-4 h-4" />
               <span>Install App</span>
             </button>
           ) : (
             !isInstalled && (
-              <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
+              <div className="p-3 rounded-lg bg-slate-950/70 border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
                 One-tap install is unavailable in this browser. On Android/Chromium it appears automatically once the
                 install criteria are met; on iOS use the guide below.
               </div>
@@ -131,7 +131,7 @@ export const PWAInstallModal: React.FC<PWAInstallModalProps> = ({ isOpen, onClos
 
           {/* iOS Safari step-by-step guide */}
           {(isIOS || !canInstall) && (
-            <div className="p-4 rounded-xl bg-slate-950/70 border border-slate-800">
+            <div className="p-4 rounded-lg bg-slate-950/70 border border-slate-800">
               <div className="flex items-center gap-2 mb-3">
                 <Smartphone className="w-4 h-4 text-teal-400" />
                 <span className="text-xs font-bold text-white">Install on iPhone / iPad (Safari)</span>

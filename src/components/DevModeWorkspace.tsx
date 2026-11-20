@@ -152,10 +152,10 @@ export const DevModeWorkspace: React.FC<DevModeWorkspaceProps> = ({
           {/* Feminine Voice Profile Selector */}
           <button
             onClick={onOpenVoiceModal}
-            className="px-2.5 py-1 rounded-xl bg-pink-950/60 hover:bg-pink-900/80 text-pink-200 border border-pink-700/50 text-xs font-medium flex items-center gap-1.5 transition"
+            className="px-2.5 py-1 rounded-lg bg-teal-950/70 hover:bg-teal-900 active:scale-[0.97] text-teal-200 border border-teal-700/50 text-xs font-medium flex items-center gap-1.5 transition"
             title="Configure Niki's Voice Profile (Google UK English Female / Samantha)"
           >
-            <Sparkles className="w-3 h-3 text-pink-400" />
+            <Sparkles className="w-3 h-3 text-teal-300" />
             <span>Voice</span>
           </button>
 

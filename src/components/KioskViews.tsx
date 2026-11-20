@@ -40,7 +40,7 @@ export const IdleView: React.FC<ViewProps & { onWakeUp?: () => void }> = ({
       className="w-full h-full flex flex-col items-center justify-center text-center p-6 cursor-pointer select-none"
     >
       <div
-        className="font-bold tracking-tight transition-transform hover:scale-105 duration-300 text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+        className="font-bold tracking-tight transition-transform duration-300 text-5xl sm:text-6xl md:text-7xl lg:text-8xl animate-niki-breathe"
       >
         {IDLE_SCRIPT.kaomoji}
       </div>
@@ -193,25 +193,14 @@ export const ImageSelectionView: React.FC<ImageSelectionViewProps> = ({
         loadingNext ? 'opacity-30 pointer-events-none' : 'opacity-100'
       }`}
     >
-      {/* Header bar with titles and primary Select action */}
-      <div className="flex items-start justify-between gap-4">
-        <div className="space-y-1">
-          <h1 className="font-bold text-2xl sm:text-3xl md:text-4xl">
-            Choose your photo
-          </h1>
-          <p className="text-white/80 text-base sm:text-lg md:text-xl">
-            Tap a photo below to select it for souvenir printing.
-          </p>
-        </div>
-
-        <button
-          onClick={handleSelect}
-          disabled={photoURLs.length === 0 || loadingNext}
-          className="py-3 px-6 sm:py-3.5 sm:px-8 rounded-xl font-bold transition shadow-xl bg-white text-[#006564] hover:bg-white/95 active:scale-95 text-base sm:text-lg md:text-xl flex items-center gap-2"
-        >
-          <Printer className="w-5 h-5 text-[#006564]" />
-          <span>Print Photo #{selectedIndex + 1}</span>
-        </button>
+      {/* Header — information only; the action lives in the bottom bar */}
+      <div className="space-y-1">
+        <h1 className="font-bold text-2xl sm:text-3xl md:text-4xl">
+          Choose your photo
+        </h1>
+        <p className="text-white/80 text-base sm:text-lg md:text-xl">
+          Tap a photo below to select it for souvenir printing.
+        </p>
       </div>
 
       {/* Horizontal Photo Gallery with Custom Airplane Scroll Track */}
@@ -268,17 +257,31 @@ export const ImageSelectionView: React.FC<ImageSelectionViewProps> = ({
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="flex items-center justify-between pt-1">
-        <div className="text-xs sm:text-sm text-teal-200/90 font-medium">
+      {/* Bottom Action Bar — thumb-reachable primary CTA */}
+      <div className="w-full flex items-center justify-between gap-4 pt-1">
+        <div className="text-xs sm:text-sm text-teal-200/90 font-medium min-w-0">
           Selected: <strong className="text-white">Photo #{selectedIndex + 1}</strong> of {photoURLs.length}
         </div>
-        <button
-          onClick={onCancel}
-          className="text-white/70 hover:text-white text-sm sm:text-base font-medium"
-        >
-          Cancel
-        </button>
+
+        <div className="flex items-center gap-3 shrink-0">
+          {onCancel && (
+            <button
+              onClick={onCancel}
+              className="text-white/70 hover:text-white text-sm sm:text-base font-medium transition"
+            >
+              Cancel
+            </button>
+          )}
+
+          <button
+            onClick={handleSelect}
+            disabled={photoURLs.length === 0 || loadingNext}
+            className="py-3 sm:py-3.5 px-6 sm:px-8 rounded-2xl font-bold transition shadow-xl bg-white text-[#006564] hover:bg-white/95 active:scale-[0.97] text-base sm:text-lg md:text-xl flex items-center gap-2 disabled:opacity-50"
+          >
+            <Printer className="w-5 h-5 text-[#006564]" />
+            <span>Print Photo #<span className="tabular-nums">{selectedIndex + 1}</span></span>
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -353,7 +356,9 @@ export const PrintingView: React.FC<
         <div className="relative mb-5 w-44 h-32 sm:w-56 sm:h-40 rounded-xl overflow-hidden border-4 border-white shadow-2xl bg-slate-900">
           <img src={chosenPhoto} alt="Printing preview" className="w-full h-full object-cover" />
           {!isFinished && (
-            <div className="absolute inset-x-0 top-0 h-1.5 bg-teal-300 shadow-[0_0_14px_#5eead4] animate-bounce" />
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              <div className="absolute inset-x-0 h-1.5 bg-teal-300 shadow-[0_0_14px_#5eead4] rounded-full animate-niki-sweep" />
+            </div>
           )}
           {isFinished && (
             <div className="absolute top-2 right-2 bg-emerald-500 text-white rounded-full p-1 shadow-lg">
@@ -396,14 +401,11 @@ export const PrintingView: React.FC<
         />
       </div>
 
-      {!isFinished && (
-        <>
+        {!isFinished && (
           <p className="mt-3 text-teal-200/90 text-xs sm:text-sm font-medium">
             {getStageDescription()}
           </p>
-
-        </>
-      )}
+        )}
 
       {/* Once Progress Completes: 2 Clear Options for the User */}
       {isFinished ? (
@@ -432,7 +434,7 @@ export const PrintingView: React.FC<
             </button>
           </div>
 
-          <div className="text-[11px] text-white/60 mt-1">
+          <div className="text-[11px] text-white/60 mt-1 tabular-nums">
             Auto-continuing in <strong>{autoAdvanceRemaining}s</strong> if already collected
           </div>
         </div>
@@ -499,7 +501,7 @@ export const PaperJamRecoveryView: React.FC<
             {PAPER_JAM_SCRIPT.banner}
           </span>
         </div>
-        <span className="text-xs font-mono bg-amber-900/60 text-amber-300 px-2 py-0.5 rounded-md">
+        <span className="text-xs font-mono bg-amber-900/60 text-amber-300 px-2 py-0.5 rounded-md tabular-nums">
           {progress}%
         </span>
       </div>
@@ -514,7 +516,7 @@ export const PaperJamRecoveryView: React.FC<
             <RotateCcw className="w-6 h-6 text-teal-300 absolute -top-2 -right-2 animate-spin duration-1000" />
           </div>
           {/* Animated paper moving upward (retracting) */}
-          <div className="absolute -bottom-1 w-12 h-6 bg-white/90 rounded-t shadow-md border border-slate-300 animate-bounce" />
+          <div className="absolute -bottom-1 w-12 h-6 bg-white/90 rounded-t shadow-md border border-slate-300 animate-pulse" />
         </div>
 
         <h1 className="font-bold text-white drop-shadow text-2xl sm:text-3xl md:text-4xl">
@@ -633,7 +635,7 @@ export const PrintSuccessView: React.FC<
         {PRINT_SUCCESS_SCRIPT.collectLine}
       </p>
 
-      <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 text-white/90 text-xs sm:text-sm border border-white/20">
+      <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 text-white/90 text-xs sm:text-sm border border-white/20 tabular-nums">
         <span>{PRINT_SUCCESS_SCRIPT.countdown} <strong>{secondsRemaining}s</strong></span>
         <span className="text-white/40">•</span>
         <span className="text-white/70">{PRINT_SUCCESS_SCRIPT.tapToFinish}</span>

@@ -66,7 +66,7 @@ export const StorageManagerModal: React.FC<StorageManagerModalProps> = ({
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-slate-800">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-teal-500/20 text-teal-400 flex items-center justify-center">
               <Database className="w-5 h-5" />
             </div>
             <div>
@@ -98,7 +98,7 @@ export const StorageManagerModal: React.FC<StorageManagerModalProps> = ({
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {/* Quick Metrics */}
           <div className="grid grid-cols-3 gap-4">
-            <div className="p-4 rounded-xl bg-slate-800/80 border border-slate-700/60">
+            <div className="p-4 rounded-lg bg-slate-800/80 border border-slate-700/60">
               <div className="flex items-center justify-between text-xs text-slate-400">
                 <span>Stored Photos</span>
                 <HardDrive className="w-4 h-4 text-teal-400" />
@@ -107,7 +107,7 @@ export const StorageManagerModal: React.FC<StorageManagerModalProps> = ({
               <div className="text-[11px] text-teal-400 mt-1">IndexedDB Persistence</div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-800/80 border border-slate-700/60">
+            <div className="p-4 rounded-lg bg-slate-800/80 border border-slate-700/60">
               <div className="flex items-center justify-between text-xs text-slate-400">
                 <span>Offline Sync Queue</span>
                 <CheckCircle2 className="w-4 h-4 text-amber-400" />
@@ -116,7 +116,7 @@ export const StorageManagerModal: React.FC<StorageManagerModalProps> = ({
               <div className="text-[11px] text-amber-400 mt-1">Pending sync actions</div>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-800/80 border border-slate-700/60">
+            <div className="p-4 rounded-lg bg-slate-800/80 border border-slate-700/60">
               <div className="flex items-center justify-between text-xs text-slate-400">
                 <span>Offline Status</span>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -136,7 +136,7 @@ export const StorageManagerModal: React.FC<StorageManagerModalProps> = ({
             </div>
 
             {photos.length === 0 ? (
-              <div className="p-8 text-center border border-dashed border-slate-700 rounded-xl text-slate-400 text-sm">
+              <div className="p-8 text-center border border-dashed border-slate-700 rounded-lg text-slate-400 text-sm">
                 No captured photos stored yet. Take a photo in the Kiosk camera to populate!
               </div>
             ) : (
@@ -144,7 +144,7 @@ export const StorageManagerModal: React.FC<StorageManagerModalProps> = ({
                 {photos.map((p) => (
                   <div
                     key={p.id}
-                    className="group relative rounded-xl overflow-hidden border border-slate-700 bg-slate-800 flex flex-col"
+                    className="group relative rounded-lg overflow-hidden border border-slate-700 bg-slate-800 flex flex-col"
                   >
                     <div className="aspect-[4/3] bg-black">
                       <img
@@ -175,11 +175,11 @@ export const StorageManagerModal: React.FC<StorageManagerModalProps> = ({
               Offline Action Sync Queue
             </h4>
             {queue.length === 0 ? (
-              <div className="p-4 text-center border border-dashed border-slate-700 rounded-xl text-slate-400 text-xs">
+              <div className="p-4 text-center border border-dashed border-slate-700 rounded-lg text-slate-400 text-xs">
                 Sync queue is empty. Actions taken offline will automatically register here.
               </div>
             ) : (
-              <div className="rounded-xl border border-slate-800 overflow-hidden text-xs">
+              <div className="rounded-lg border border-slate-800 overflow-hidden text-xs">
                 <table className="w-full text-left">
                   <thead className="bg-slate-800/80 text-slate-400 font-medium">
                     <tr>
@@ -217,7 +217,7 @@ export const StorageManagerModal: React.FC<StorageManagerModalProps> = ({
         <div className="p-4 border-t border-slate-800 flex items-center justify-between bg-slate-900">
           <button
             onClick={handleClearAll}
-            className="px-4 py-2 rounded-xl text-xs font-semibold text-rose-400 hover:bg-rose-500/10 border border-rose-500/30 transition flex items-center gap-1.5"
+            className="px-4 py-2 rounded-lg text-xs font-semibold text-rose-400 hover:bg-rose-500/10 border border-rose-500/30 transition flex items-center gap-1.5"
           >
             <Trash2 className="w-4 h-4" />
             Clear Storage
@@ -226,7 +226,7 @@ export const StorageManagerModal: React.FC<StorageManagerModalProps> = ({
           <div className="flex items-center gap-3">
             <button
               onClick={handleExportJSON}
-              className="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white transition flex items-center gap-1.5 border border-slate-700"
+              className="px-4 py-2 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-white transition flex items-center gap-1.5 border border-slate-700"
             >
               <Download className="w-4 h-4" />
               Export JSON Backup
@@ -234,7 +234,7 @@ export const StorageManagerModal: React.FC<StorageManagerModalProps> = ({
 
             <button
               onClick={onClose}
-              className="px-5 py-2 rounded-xl text-xs font-semibold bg-teal-600 hover:bg-teal-500 text-white transition shadow"
+              className="px-5 py-2 rounded-lg text-xs font-semibold bg-teal-600 hover:bg-teal-500 text-white transition shadow"
             >
               Close
             </button>

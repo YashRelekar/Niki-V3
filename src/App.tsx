@@ -159,6 +159,10 @@ export default function App() {
             onFinishSession={() =>
               backendService.transitionKioskState('WAIT_FOR_USER_CHOOSE_PHOTO')
             }
+            onCancel={() =>
+              // Cancel 0.5-ways back: return to the invite, not the sleeping kiosk
+              backendService.transitionKioskState('WAIT_FOR_USER_ENGAGEMENT')
+            }
           />
         );
       case 'WAIT_FOR_USER_CHOOSE_PHOTO':

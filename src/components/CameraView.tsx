@@ -317,9 +317,13 @@ export const CameraView: React.FC<CameraViewProps> = ({
 
         {countdown !== null && (
           <div className="absolute inset-0 flex items-center justify-center z-40 bg-black/50 backdrop-blur-sm">
-            <span className="text-9xl font-black text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)] animate-bounce">
-              {countdown}
-            </span>
+            <div className="relative flex items-center justify-center">
+              {/* Attention halo — state change, one gentle pulse per digit */}
+              <span className="absolute w-32 h-32 rounded-full bg-white/10 animate-ping" />
+              <span className="relative text-9xl font-black text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)] tabular-nums">
+                {countdown}
+              </span>
+            </div>
           </div>
         )}
 
@@ -368,9 +372,9 @@ export const CameraView: React.FC<CameraViewProps> = ({
             {/* Finish & Proceed to Selection Button */}
             <button
               onClick={handleFinish}
-              className="px-5 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-400 active:scale-95 text-teal-950 font-bold text-sm flex items-center gap-2 shadow-lg transition flex-shrink-0"
+              className="px-5 py-2.5 rounded-2xl bg-white hover:bg-white/95 active:scale-[0.97] text-[#006564] font-bold text-sm flex items-center gap-2 shadow-lg transition flex-shrink-0"
             >
-              <span>Next: Review ({capturedPhotos.length})</span>
+              <span>Next: Review (<span className="tabular-nums">{capturedPhotos.length}</span>)</span>
               <ArrowRight className="w-4 h-4 stroke-[2.5]" />
             </button>
           </div>
@@ -380,7 +384,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
         <div className="flex items-center justify-between max-w-xl mx-auto w-full">
           <button
             onClick={handleCancel}
-            className="px-4 py-2 rounded-xl text-white/70 hover:text-white text-xs font-semibold hover:bg-white/10 transition"
+            className="px-4 py-2 rounded-lg text-white/70 hover:text-white text-xs font-semibold hover:bg-white/10 transition"
           >
             Cancel
           </button>
@@ -389,7 +393,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
             <button
               onClick={triggerCountdownAndCapture}
               disabled={isCapturing}
-              className="px-4 py-2 rounded-xl bg-teal-500/20 hover:bg-teal-500/30 text-teal-300 border border-teal-500/40 text-xs font-semibold flex items-center gap-1.5 transition disabled:opacity-50"
+              className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-semibold flex items-center gap-1.5 transition active:scale-[0.97] disabled:opacity-50"
               title="3-Second Timer"
             >
               <Sparkles className="w-3.5 h-3.5 text-teal-300" />
@@ -409,7 +413,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
               <button
                 onClick={executeCapture}
                 disabled={isCapturing}
-                className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-semibold flex items-center gap-1.5 transition"
+                className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 active:scale-[0.97] text-white border border-white/20 text-xs font-semibold flex items-center gap-1.5 transition"
                 title="Take Another Photo"
               >
                 <RotateCcw className="w-3.5 h-3.5" />

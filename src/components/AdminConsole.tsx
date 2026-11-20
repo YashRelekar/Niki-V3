@@ -93,7 +93,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
       </div>
 
       {/* High-level status bar matching Admin.swift */}
-      <div className="py-3 px-4 my-3 bg-slate-800/80 rounded-xl border border-slate-700/50 flex flex-col items-center justify-center text-center shrink-0">
+      <div className="py-3 px-4 my-3 bg-slate-800/80 rounded-lg border border-slate-700/50 flex flex-col items-center justify-center text-center shrink-0">
         <div className="text-base font-semibold text-teal-300">
           {stateLabel}
         </div>
@@ -109,7 +109,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
       {activeTab === 'console' ? (
         <div className="flex-1 flex flex-col min-h-0 space-y-4">
           {/* Admin Action Buttons matching Admin.swift */}
-          <div className="bg-slate-800/50 p-3 rounded-xl border border-slate-800 shrink-0">
+          <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-800 shrink-0">
             <div className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-2">
               Available Admin Decisions
             </div>
@@ -134,7 +134,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
           </div>
 
           {/* Conversation Log matching Admin.swift */}
-          <div className="flex-1 min-h-[320px] flex flex-col bg-slate-950/70 rounded-xl p-3 border border-slate-800">
+          <div className="flex-1 min-h-[320px] flex flex-col bg-slate-950/70 rounded-lg p-3 border border-slate-800">
             <div className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-2 flex items-center justify-between shrink-0">
               <span className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
@@ -162,7 +162,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
                           ? 'text-sky-400'
                           : isAi
                           ? 'text-emerald-400'
-                          : 'text-purple-400'
+                          : 'text-slate-400'
                       }`}
                     >
                       {msg.role}
@@ -192,7 +192,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
           <div className="grid grid-cols-2 gap-2 text-xs">
             <button
               onClick={() => backendService.transitionKioskState('IDLE')}
-              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-xl border border-slate-700 flex items-center gap-2"
+              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-lg border border-slate-700 flex items-center gap-2"
             >
               <RotateCcw className="w-4 h-4 text-slate-400" />
               <div>
@@ -203,7 +203,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
 
             <button
               onClick={() => backendService.transitionKioskState('DETECT_PRESENCE')}
-              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-xl border border-slate-700 flex items-center gap-2"
+              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-lg border border-slate-700 flex items-center gap-2"
             >
               <Sparkles className="w-4 h-4 text-teal-400" />
               <div>
@@ -214,7 +214,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
 
             <button
               onClick={() => backendService.transitionKioskState('WAIT_FOR_USER_ENGAGEMENT')}
-              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-xl border border-slate-700 flex items-center gap-2"
+              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-lg border border-slate-700 flex items-center gap-2"
             >
               <Activity className="w-4 h-4 text-sky-400" />
               <div>
@@ -225,7 +225,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
 
             <button
               onClick={() => backendService.transitionKioskState('CAPTURE_PHOTOS')}
-              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-xl border border-slate-700 flex items-center gap-2"
+              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-lg border border-slate-700 flex items-center gap-2"
             >
               <Camera className="w-4 h-4 text-emerald-400" />
               <div>
@@ -236,9 +236,9 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
 
             <button
               onClick={() => backendService.transitionKioskState('WAIT_FOR_USER_CHOOSE_PHOTO')}
-              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-xl border border-slate-700 flex items-center gap-2"
+              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-lg border border-slate-700 flex items-center gap-2"
             >
-              <Sparkles className="w-4 h-4 text-purple-400" />
+              <Sparkles className="w-4 h-4 text-teal-300" />
               <div>
                 <div className="font-bold text-white">5. Photo Selection</div>
                 <div className="text-[10px] text-slate-400">Airplane slider & cards</div>
@@ -247,7 +247,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
 
             <button
               onClick={() => backendService.transitionKioskState('PRINT_PHOTO')}
-              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-xl border border-slate-700 flex items-center gap-2"
+              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-lg border border-slate-700 flex items-center gap-2"
             >
               <Printer className="w-4 h-4 text-amber-400" />
               <div>
@@ -258,7 +258,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
 
             <button
               onClick={() => backendService.transitionKioskState('PAPER_JAM_RECOVERY')}
-              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-xl border border-amber-800/70 flex items-center gap-2"
+              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-lg border border-amber-800/70 flex items-center gap-2"
             >
               <AlertTriangle className="w-4 h-4 text-amber-400" />
               <div>
@@ -269,7 +269,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
 
             <button
               onClick={() => backendService.transitionKioskState('PRINT_SUCCESS')}
-              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-xl border border-slate-700 flex items-center gap-2"
+              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-lg border border-slate-700 flex items-center gap-2"
             >
               <CheckCircle2 className="w-4 h-4 text-green-400" />
               <div>
@@ -280,7 +280,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
 
             <button
               onClick={() => backendService.transitionKioskState('THINKING')}
-              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-xl border border-slate-700 flex items-center gap-2"
+              className="p-3 bg-slate-800 hover:bg-slate-700 text-left rounded-lg border border-slate-700 flex items-center gap-2"
             >
               <Activity className="w-4 h-4 text-rose-400" />
               <div>
@@ -293,7 +293,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
           <div className="pt-2 border-t border-slate-800">
             <button
               onClick={() => backendService.triggerCameraUUIDJump()}
-              className="w-full py-2.5 px-4 bg-teal-700 hover:bg-teal-600 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2"
+              className="w-full py-2.5 px-4 bg-teal-700 hover:bg-teal-600 text-white font-bold text-xs rounded-lg transition flex items-center justify-center gap-2"
             >
               <Camera className="w-4 h-4" />
               Trigger Backend Camera UUID Jump Event
