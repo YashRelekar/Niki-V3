@@ -25,7 +25,7 @@ export const FlapBoard: React.FC<FlapBoardProps> = ({
 
   return (
     <span
-      className={`inline-flex items-center gap-[2px] font-mono tabular-nums ${className}`}
+      className={`inline-flex flex-wrap items-center gap-[2px] font-mono tabular-nums ${className}`}
       aria-label={text}
     >
       {chars.map((ch, i) =>
@@ -35,6 +35,7 @@ export const FlapBoard: React.FC<FlapBoardProps> = ({
           <span
             key={`${i}-${ch}`}
             className={`flap-cell relative inline-flex items-center justify-center ${cellClassName}`}
+            style={{ animationDelay: `${Math.min(i, 24) * 0.045}s` }}
             aria-hidden="true"
           >
             {ch}
