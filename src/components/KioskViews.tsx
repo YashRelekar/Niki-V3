@@ -44,7 +44,7 @@ export const IdleView: React.FC<ViewProps & { onWakeUp?: () => void }> = ({
       >
         {IDLE_SCRIPT.kaomoji}
       </div>
-      <p className="mt-6 text-white/60 text-xs sm:text-sm md:text-base tracking-wider uppercase font-medium">
+      <p className="mt-6 text-white/60 text-xs sm:text-sm md:text-base tracking-wider uppercase font-medium k-enter k-d2">
         {IDLE_SCRIPT.status}
       </p>
     </div>
@@ -61,13 +61,13 @@ export const InitialView: React.FC<ViewProps & { onApproach?: () => void }> = ({
       onClick={onApproach}
       className="w-full h-full flex flex-col items-center justify-center text-center p-6 sm:p-8 select-none cursor-pointer"
     >
-      <h1 className="font-bold leading-tight drop-shadow-md text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
+      <h1 className="font-bold leading-tight drop-shadow-md text-3xl sm:text-4xl md:text-5xl lg:text-6xl k-enter">
         {PRESENCE_SCRIPT.headline}
       </h1>
-      <h2 className="mt-4 font-normal text-white/90 leading-tight text-2xl sm:text-3xl md:text-4xl lg:text-5xl">
+      <h2 className="mt-4 font-normal text-white/90 leading-tight text-2xl sm:text-3xl md:text-4xl lg:text-5xl k-enter k-d2">
         {PRESENCE_SCRIPT.sub}
       </h2>
-      <div className="mt-8 flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white/80 text-xs sm:text-sm">
+      <div className="mt-8 flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#013030] border border-teal-800/80 text-teal-100 text-xs sm:text-sm shadow-lg k-enter k-d3">
         <Sparkles className="w-4 h-4 text-teal-300" />
         <span>{PRESENCE_SCRIPT.cta}</span>
       </div>
@@ -109,21 +109,21 @@ export const InviteView: React.FC<InviteViewProps> = ({
     >
       {/* Top Text Section with scaled, proportional typography */}
       <div className="space-y-3 sm:space-y-4 max-w-4xl">
-        <h1 className="font-bold whitespace-pre-line leading-tight text-2xl sm:text-3xl md:text-4xl lg:text-[42px] drop-shadow-sm">
+        <h1 className="font-bold whitespace-pre-line leading-tight text-2xl sm:text-3xl md:text-4xl lg:text-[42px] drop-shadow-sm k-enter">
           {welcomeText}
         </h1>
 
-        <h2 className="font-normal text-white/90 whitespace-pre-line leading-snug text-lg sm:text-xl md:text-2xl lg:text-[28px]">
+        <h2 className="font-normal text-white/90 whitespace-pre-line leading-snug text-lg sm:text-xl md:text-2xl lg:text-[28px] k-enter k-d2">
           {INVITE_SCRIPT.welcomeSub}
         </h2>
       </div>
 
       {/* Primary Action Button (Centered with comfortable sizing) */}
-      <div className="w-full flex flex-col items-center justify-center my-auto py-4">
+      <div className="w-full flex flex-col items-center justify-center my-auto py-4 k-enter k-d3">
         <button
           onClick={handleStart}
           disabled={loadingNext}
-          className="w-full max-w-xs sm:max-w-sm py-4 px-8 rounded-2xl bg-white text-[#006564] font-bold text-center tracking-wide shadow-2xl hover:bg-white/95 active:scale-95 transition-all flex items-center justify-center gap-3 text-lg sm:text-xl md:text-2xl"
+          className="w-full max-w-xs sm:max-w-sm py-4 px-8 rounded-2xl bg-white text-[#006564] font-bold text-center tracking-wide shadow-2xl hover:bg-white/95 active:scale-[0.97] transition-all flex items-center justify-center gap-3 text-lg sm:text-xl md:text-2xl"
         >
           <span>{primaryActionTitle}</span>
           <ArrowRight className="w-6 h-6 stroke-[2.5]" />
@@ -131,7 +131,7 @@ export const InviteView: React.FC<InviteViewProps> = ({
       </div>
 
       {/* Footer Secondary Action */}
-      <div className="flex justify-end pt-2">
+      <div className="flex justify-end pt-2 k-enter k-d4">
         <button
           onClick={onSecondaryAction}
           className="text-white/70 hover:text-white text-sm sm:text-base font-medium underline underline-offset-4 transition"
@@ -194,7 +194,7 @@ export const ImageSelectionView: React.FC<ImageSelectionViewProps> = ({
       }`}
     >
       {/* Header — information only; the action lives in the bottom bar */}
-      <div className="space-y-1">
+      <div className="space-y-1 k-enter">
         <h1 className="font-bold text-2xl sm:text-3xl md:text-4xl">
           Choose your photo
         </h1>
@@ -233,13 +233,13 @@ export const ImageSelectionView: React.FC<ImageSelectionViewProps> = ({
                 />
 
                 {/* Index Tag */}
-                <div className="absolute bottom-3 left-3 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-white font-bold text-xs">
+                <div className="absolute bottom-3 left-3 px-2 py-0.5 rounded-lg bg-black/80 text-white font-bold text-xs tabular-nums">
                   Photo #{index + 1}
                 </div>
 
                 {/* Selection Checkmark Badge */}
                 {isSelected && (
-                  <div className="absolute top-3 right-3 w-9 h-9 rounded-full bg-[#006564] flex items-center justify-center shadow-lg border-2 border-white animate-in zoom-in-75">
+                  <div className="absolute top-3 right-3 w-9 h-9 rounded-full bg-[#006564] flex items-center justify-center shadow-lg border-2 border-white k-pop">
                     <Check className="w-5 h-5 text-white stroke-[3]" />
                   </div>
                 )}
@@ -258,7 +258,7 @@ export const ImageSelectionView: React.FC<ImageSelectionViewProps> = ({
       </div>
 
       {/* Bottom Action Bar — thumb-reachable primary CTA */}
-      <div className="w-full flex items-center justify-between gap-4 pt-1">
+      <div className="w-full flex items-center justify-between gap-4 pt-1 k-enter k-d3">
         <div className="text-xs sm:text-sm text-teal-200/90 font-medium min-w-0">
           Selected: <strong className="text-white">Photo #{selectedIndex + 1}</strong> of {photoURLs.length}
         </div>
@@ -353,7 +353,7 @@ export const PrintingView: React.FC<
     >
       {/* Printed Photo Preview Animation */}
       {chosenPhoto ? (
-        <div className="relative mb-5 w-44 h-32 sm:w-56 sm:h-40 rounded-xl overflow-hidden border-4 border-white shadow-2xl bg-slate-900">
+        <div className={`relative mb-5 w-44 h-32 sm:w-56 sm:h-40 rounded-2xl overflow-hidden border-4 bg-slate-900 k-enter ${isFinished ? 'border-white shadow-2xl' : 'border-white/70 shadow-xl'}`}>
           <img src={chosenPhoto} alt="Printing preview" className="w-full h-full object-cover" />
           {!isFinished && (
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -361,14 +361,20 @@ export const PrintingView: React.FC<
             </div>
           )}
           {isFinished && (
-            <div className="absolute top-2 right-2 bg-emerald-500 text-white rounded-full p-1 shadow-lg">
-              <Check className="w-4 h-4 stroke-[3]" />
-            </div>
+            <>
+              <div className="absolute top-2 right-2 bg-emerald-500 text-white rounded-full p-1 shadow-lg k-pop">
+                <Check className="w-4 h-4 stroke-[3]" />
+              </div>
+              {/* One-shot completion sheen */}
+              <div className="pointer-events-none absolute inset-0 overflow-hidden">
+                <div className="k-sheen absolute top-0 bottom-0 w-1/3 bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+              </div>
+            </>
           )}
         </div>
       ) : (
-        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white/10 flex items-center justify-center mb-5 animate-pulse">
-          <Printer className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
+        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#013030] border border-teal-800/60 flex items-center justify-center mb-5 k-enter">
+          <Printer className="w-10 h-10 sm:w-12 sm:h-12 text-teal-300" />
         </div>
       )}
 
@@ -390,7 +396,7 @@ export const PrintingView: React.FC<
       )}
 
       {/* Printing Progress Bar */}
-      <div className="w-64 sm:w-80 h-3 bg-white/20 rounded-full overflow-hidden mt-4 shadow-inner">
+      <div className="w-64 sm:w-80 h-3 bg-black/30 rounded-full overflow-hidden mt-4 shadow-inner">
         <div
           className={`h-full transition-all duration-150 ease-out rounded-full shadow-[0_0_10px_#2dd4bf] ${
             isFinished
@@ -409,7 +415,7 @@ export const PrintingView: React.FC<
 
       {/* Once Progress Completes: 2 Clear Options for the User */}
       {isFinished ? (
-        <div className="mt-6 flex flex-col items-center gap-3 w-full max-w-md animate-in fade-in slide-in-from-bottom-3 duration-300">
+        <div className="mt-6 flex flex-col items-center gap-3 w-full max-w-md k-enter k-d2">
           <div className="text-xs uppercase tracking-wider text-teal-200/90 font-bold">
             How does your print look?
           </div>
@@ -418,7 +424,7 @@ export const PrintingView: React.FC<
             {/* Option 1: Move on normally */}
             <button
               onClick={() => onDone?.()}
-              className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white text-[#006564] hover:bg-white/95 font-bold shadow-xl transition active:scale-95 flex items-center justify-center gap-2 text-sm sm:text-base border border-teal-100 ring-2 ring-white/50"
+              className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-white text-[#006564] hover:bg-white/95 font-bold shadow-xl transition active:scale-[0.97] flex items-center justify-center gap-2 text-sm sm:text-base"
             >
               <CheckCircle2 className="w-5 h-5 text-emerald-600" />
               <span>Photo Received — Move On!</span>
@@ -427,9 +433,9 @@ export const PrintingView: React.FC<
             {/* Option 2: Notify robot about Paper Jam */}
             <button
               onClick={() => onPaperJam?.()}
-              className="w-full sm:w-auto px-5 py-3 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border-2 border-amber-400/70 text-amber-100 font-bold shadow-xl transition active:scale-95 flex items-center justify-center gap-2 text-sm sm:text-base"
+              className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold shadow-xl transition active:scale-[0.97] flex items-center justify-center gap-2 text-sm sm:text-base"
             >
-              <AlertTriangle className="w-5 h-5 text-amber-300 animate-pulse" />
+              <AlertTriangle className="w-5 h-5 text-amber-800" />
               <span>Paper Jammed / Stuck?</span>
             </button>
           </div>
@@ -445,7 +451,7 @@ export const PrintingView: React.FC<
               e.stopPropagation();
               setIsFinished(true);
             }}
-            className="mt-6 px-5 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white text-xs sm:text-sm font-medium transition active:scale-95 shadow"
+            className="mt-6 px-5 py-2 rounded-lg bg-[#013030] hover:bg-[#02403c] border border-teal-800/70 text-teal-100 text-xs sm:text-sm font-medium transition active:scale-[0.97] shadow"
           >
             Skip to Finish
           </button>
@@ -494,24 +500,24 @@ export const PaperJamRecoveryView: React.FC<
   return (
     <div className="w-full h-full flex flex-col items-center justify-between p-6 sm:p-8 select-none overflow-hidden">
       {/* Top Banner Alert */}
-      <div className="w-full max-w-xl mx-auto flex items-center justify-between gap-3 px-4 py-2.5 rounded-2xl bg-amber-500/20 border border-amber-400/50 backdrop-blur-sm text-amber-200">
+      <div className="w-full max-w-xl mx-auto flex items-center justify-between gap-3 px-4 py-2.5 rounded-2xl bg-amber-400 text-amber-950 shadow-xl k-enter">
         <div className="flex items-center gap-2.5">
-          <div className="w-3 h-3 rounded-full bg-amber-400 animate-ping shrink-0" />
+          <div className="w-3 h-3 rounded-full bg-amber-900 animate-ping shrink-0" />
           <span className="text-xs sm:text-sm font-bold uppercase tracking-wider">
             {PAPER_JAM_SCRIPT.banner}
           </span>
         </div>
-        <span className="text-xs font-mono bg-amber-900/60 text-amber-300 px-2 py-0.5 rounded-md tabular-nums">
+        <span className="text-xs font-mono bg-amber-950/20 text-amber-950 px-2 py-0.5 rounded-lg tabular-nums">
           {progress}%
         </span>
       </div>
 
       {/* Center Main Stage Content */}
-      <div className="my-auto flex flex-col items-center text-center max-w-lg w-full">
+      <div className="my-auto flex flex-col items-center text-center max-w-lg w-full k-enter k-d2">
         {/* Animated Printer Mechanical Recovery Visual */}
-        <div className="relative mb-4 w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center">
-          <div className="absolute inset-0 rounded-3xl bg-amber-500/10 border-2 border-amber-400/30 animate-pulse" />
-          <div className="relative w-20 h-20 rounded-2xl bg-slate-900/90 border border-amber-400/50 flex items-center justify-center shadow-2xl">
+        <div className="relative mb-4 w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center k-enter">
+          <div className="absolute inset-0 rounded-3xl bg-[#01302c] border-2 border-amber-400/50" />
+          <div className="relative w-20 h-20 rounded-2xl bg-slate-900 border border-amber-400/50 flex items-center justify-center shadow-2xl">
             <Printer className="w-10 h-10 text-amber-300" />
             <RotateCcw className="w-6 h-6 text-teal-300 absolute -top-2 -right-2 animate-spin duration-1000" />
           </div>
@@ -528,7 +534,7 @@ export const PaperJamRecoveryView: React.FC<
         </p>
 
         {/* Progress Bar */}
-        <div className="w-full max-w-md h-3 bg-white/20 rounded-full overflow-hidden mt-4 shadow-inner">
+        <div className="w-full max-w-md h-3 bg-black/30 rounded-full overflow-hidden mt-4 shadow-inner">
           <div
             className="h-full bg-gradient-to-r from-amber-400 via-teal-300 to-emerald-400 transition-all duration-150 ease-out rounded-full shadow-[0_0_12px_#fbbf24]"
             style={{ width: `${progress}%` }}
@@ -536,7 +542,7 @@ export const PaperJamRecoveryView: React.FC<
         </div>
 
         {/* Step-by-step indicator cards */}
-        <div className="mt-5 w-full grid grid-cols-2 gap-2 text-left">
+        <div className="mt-5 w-full grid grid-cols-2 gap-2 text-left k-enter k-d3">
           {steps.map((st) => {
             const isDone = activeStep > st.id || progress === 100;
             const isCurrent = activeStep === st.id && progress < 100;
@@ -544,21 +550,21 @@ export const PaperJamRecoveryView: React.FC<
             return (
               <div
                 key={st.id}
-                className={`p-2.5 rounded-xl border text-xs transition ${
+                className={`p-2.5 rounded-lg border transition ${
                   isCurrent
-                    ? 'bg-amber-500/20 border-amber-400/80 text-white shadow-lg'
+                    ? 'bg-amber-400 border-amber-500 text-amber-950 shadow-lg'
                     : isDone
-                    ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-200'
-                    : 'bg-slate-900/40 border-slate-700/50 text-slate-400'
+                    ? 'bg-[#02211f] border-emerald-500/60 text-emerald-200'
+                    : 'bg-[#013030] border-teal-800/60 text-teal-100/60'
                 }`}
               >
                 <div className="flex items-center gap-1.5 font-bold mb-0.5">
                   {isDone ? (
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                   ) : isCurrent ? (
-                    <RotateCcw className="w-3.5 h-3.5 text-amber-300 animate-spin shrink-0" />
+                    <RotateCcw className="w-3.5 h-3.5 text-amber-700 animate-spin shrink-0" />
                   ) : (
-                    <span className="w-3.5 h-3.5 rounded-full border border-slate-600 flex items-center justify-center text-[9px] shrink-0">
+                    <span className="w-3.5 h-3.5 rounded-full border border-teal-700 flex items-center justify-center text-[9px] shrink-0">
                       {st.id}
                     </span>
                   )}
@@ -617,28 +623,28 @@ export const PrintSuccessView: React.FC<
       onClick={onFinish}
       className="w-full h-full flex flex-col items-center justify-center text-center p-6 sm:p-8 select-none cursor-pointer"
     >
-      <div className="text-4xl sm:text-5xl mb-3">{PRINT_SUCCESS_SCRIPT.emoji}</div>
+      <div className="text-4xl sm:text-5xl mb-3 k-pop">{PRINT_SUCCESS_SCRIPT.emoji}</div>
 
       {chosenPhoto && (
-        <div className="relative mb-4 w-48 h-36 sm:w-60 sm:h-44 rounded-2xl overflow-hidden border-4 border-white shadow-2xl p-1 bg-white">
+        <div className="relative mb-4 w-48 h-36 sm:w-60 sm:h-44 rounded-2xl overflow-hidden border-4 border-white shadow-2xl p-1 bg-white k-enter k-d1">
           <img src={chosenPhoto} alt="Souvenir photo" className="w-full h-full object-cover rounded-xl" />
-          <div className="absolute bottom-2 inset-x-2 bg-[#006564]/95 py-1 text-[11px] font-bold text-white rounded shadow">
+          <div className="absolute bottom-2 inset-x-2 bg-[#006564] py-1 text-[11px] font-bold text-white rounded-lg shadow">
             {PRINT_SUCCESS_SCRIPT.badge}
           </div>
         </div>
       )}
 
-      <h1 className="font-bold text-white drop-shadow text-3xl sm:text-4xl md:text-5xl lg:text-6xl">
+      <h1 className="font-bold text-white drop-shadow text-3xl sm:text-4xl md:text-5xl lg:text-6xl k-enter k-d2">
         {PRINT_SUCCESS_SCRIPT.headline}
       </h1>
-      <p className="mt-3 text-white/90 text-base sm:text-lg md:text-xl font-medium">
+      <p className="mt-3 text-white/90 text-base sm:text-lg md:text-xl font-medium k-enter k-d3">
         {PRINT_SUCCESS_SCRIPT.collectLine}
       </p>
 
-      <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 text-white/90 text-xs sm:text-sm border border-white/20 tabular-nums">
+      <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#013030] border border-teal-800/80 text-teal-100 text-xs sm:text-sm tabular-nums shadow-lg k-enter k-d4">
         <span>{PRINT_SUCCESS_SCRIPT.countdown} <strong>{secondsRemaining}s</strong></span>
-        <span className="text-white/40">•</span>
-        <span className="text-white/70">{PRINT_SUCCESS_SCRIPT.tapToFinish}</span>
+        <span className="text-teal-800">•</span>
+        <span className="text-teal-200/80">{PRINT_SUCCESS_SCRIPT.tapToFinish}</span>
       </div>
     </div>
   );
@@ -662,17 +668,17 @@ export const GoodbyeView: React.FC<ViewProps & { onComplete?: () => void }> = ({
       onClick={onComplete}
       className="w-full h-full flex flex-col items-center justify-center text-center p-6 sm:p-8 select-none cursor-pointer"
     >
-      <div className="text-4xl sm:text-5xl mb-4">{GOODBYE_SCRIPT.emoji}</div>
+      <div className="text-4xl sm:text-5xl mb-4 k-enter k-d1">{GOODBYE_SCRIPT.emoji}</div>
 
-      <h1 className="font-bold text-white drop-shadow text-3xl sm:text-4xl md:text-5xl">
+      <h1 className="font-bold text-white drop-shadow text-3xl sm:text-4xl md:text-5xl k-enter k-d2">
         {GOODBYE_SCRIPT.headline}
       </h1>
 
-      <p className="mt-3 text-white/85 text-base sm:text-lg max-w-md">
+      <p className="mt-3 text-white/85 text-base sm:text-lg max-w-md k-enter k-d3">
         {GOODBYE_SCRIPT.body}
       </p>
 
-      <div className="mt-8 flex items-center gap-3 text-white/60 text-xs sm:text-sm">
+      <div className="mt-8 flex items-center gap-3 text-white/60 text-xs sm:text-sm k-enter k-d4">
         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
         <span>{GOODBYE_SCRIPT.footer}</span>
       </div>

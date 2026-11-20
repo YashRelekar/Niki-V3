@@ -106,7 +106,7 @@ export const DevModeWorkspace: React.FC<DevModeWorkspaceProps> = ({
   return (
     <div className="w-full h-full flex flex-col bg-slate-950 text-slate-100 font-sans overflow-hidden select-none">
       {/* Dev Mode Frame Header: Flyer Kiosk Toggles, Voice, Speaker, Online Sync, Local Storage, Platform */}
-      <div className="shrink-0 bg-slate-900/90 border-b border-teal-900/40 px-3 py-2 flex flex-wrap items-center justify-between gap-2 z-10">
+      <div className="shrink-0 bg-slate-900 border-b border-teal-900/40 px-3 py-2 flex flex-wrap items-center justify-between gap-2 z-10">
         {/* Left: View Mode Toggles (Flyer Kiosk / Admin Console / Split Dual) */}
         <div className="flex items-center gap-1.5 bg-slate-950/80 p-1 rounded-xl border border-teal-900/50">
           <button

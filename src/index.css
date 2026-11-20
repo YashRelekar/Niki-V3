@@ -6,25 +6,62 @@
     success=emerald, warning=amber, danger=red. One grey family: cool (slate).
   ─ Shape lock: pills & avatars = full · cards & primary CTAs = 16px
     (rounded-2xl) · small controls & chips = 8px (rounded-lg).
-  ─ Motion: press feedback 100–150ms on press-in; entrances ≤300ms,
-    strong ease-out; ambient motion only where it explains state.
+  ─ Materials: kiosk chrome is SOLID. White CTAs, dark-teal chips
+    (#013030), no glass. Shadows only on true floating layers (CTA, modal).
+  ─ Motion: 3-beat entrance choreography per screen (context → content →
+    action, 80/180/300ms). Press feedback 100–150ms on press-in. Ambient
+    motion only where it explains state.
 */
 
+/* ── Entrance choreography (staged via delay utilities below) ── */
+@keyframes niki-enter {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+.k-enter { animation: niki-enter 0.28s cubic-bezier(0.23, 1, 0.32, 1) both; }
+.k-d1 { animation-delay: 0.07s; }
+.k-d2 { animation-delay: 0.16s; }
+.k-d3 { animation-delay: 0.27s; }
+.k-d4 { animation-delay: 0.4s; }
 
+/* Countdown digit: one confident pop per second (re-keyed per digit) */
+@keyframes niki-pop {
+  0%   { transform: scale(1.35); opacity: 0.35; }
+  60%  { transform: scale(0.96); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.k-pop { animation: niki-pop 0.42s cubic-bezier(0.23, 1, 0.32, 1) both; }
+
+/* One-shot light sheen across the finished print */
+@keyframes niki-sheen {
+  from { transform: translateX(-140%) skewX(-16deg); }
+  to   { transform: translateX(260%) skewX(-16deg); }
+}
+.k-sheen { animation: niki-sheen 0.9s 0.15s cubic-bezier(0.23, 1, 0.32, 1) both; }
+
+/* Success check: stroke draw-in */
+@keyframes niki-draw {
+  from { stroke-dashoffset: 48; }
+  to   { stroke-dashoffset: 0; }
+}
+.k-draw {
+  stroke-dasharray: 48;
+  animation: niki-draw 0.45s 0.1s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+/* ── Ambient state motion ── */
 @keyframes niki-breathe {
   0%, 100% { transform: scale(1); }
   50%      { transform: scale(1.03); }
 }
+.animate-niki-breathe { animation: niki-breathe 4.5s ease-in-out infinite; }
 
-/* Swaps create a smooth sweep sized to the parent: */
 @keyframes niki-sweep {
   0%   { top: 4%; }
   50%  { top: 92%; }
   100% { top: 4%; }
 }
-
-.animate-niki-breathe { animation: niki-breathe 4.5s ease-in-out infinite; }
-.animate-niki-sweep   { animation: niki-sweep 1.4s ease-in-out infinite; }
+.animate-niki-sweep { animation: niki-sweep 1.4s ease-in-out infinite; }
 
 /* Custom visible scrollbars for Dev Mode & Admin Console */
 ::-webkit-scrollbar {
@@ -43,17 +80,12 @@
   background: rgba(20, 184, 166, 0.9);
 }
 
-/* Respect Reduce Motion: ambient/looping animation collapses to static. */
+/* Respect Reduce Motion: all choreographed and ambient motion collapses. */
 @media (prefers-reduced-motion: reduce) {
-  .animate-niki-breathe,
-  .animate-niki-sweep,
-  .animate-bounce,
-  .animate-ping,
-  .animate-pulse,
-  .animate-spin {
-    animation: none !important;
-  }
-  .animate-breathe-none {
-    animation: none !important;
+  .k-enter, .k-pop, .k-sheen, .k-draw,
+  .animate-niki-breathe, .animate-niki-sweep,
+  .animate-bounce, .animate-ping, .animate-pulse, .animate-spin {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

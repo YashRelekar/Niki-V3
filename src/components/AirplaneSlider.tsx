@@ -56,34 +56,31 @@ export const AirplaneSlider: React.FC<AirplaneSliderProps> = ({
         onPointerCancel={handlePointerUp}
         className="relative h-12 w-full flex items-center cursor-pointer group"
       >
-        {/* Background Track Line */}
-        <div className="absolute left-0 right-0 h-1.5 bg-white/30 rounded-full overflow-hidden shadow-inner">
-          {/* Active flight progress trail */}
-          <div
-            className="h-full bg-teal-300/80 transition-[width] duration-75"
-            style={{ width: `${pct}%` }}
-          />
-        </div>
+        {/* Flight Route: solid trail behind, dashed route ahead */}
+        <div className="absolute left-0 right-0 h-1.5 bg-black/30 rounded-full shadow-inner" />
+        <div
+          className="absolute left-0 right-0 h-0 border-t-2 border-dashed border-white/45 rounded-full"
+          style={{ left: `${pct}%` }}
+        />
+        <div
+          className="absolute left-0 h-[7px] top-1/2 -translate-y-1/2 bg-teal-300 rounded-full shadow-[0_0_8px_rgba(45,212,191,0.6)]"
+          style={{ width: `${pct}%` }}
+        />
 
         {/* Airplane Thumb */}
         <div
-          className="absolute -translate-x-1/2 flex items-center justify-center transition-[transform] duration-75"
+          className="absolute -translate-x-1/2 flex items-center justify-center"
           style={{ left: `${pct}%` }}
         >
           <div
-            className={`w-12 h-12 rounded-full flex items-center justify-center text-white transition-all ${
+            className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-150 ${
               isDragging
-                ? 'scale-125 bg-teal-500/40 shadow-xl shadow-black/50 ring-2 ring-white'
-                : 'hover:scale-110 bg-white/10'
+                ? 'scale-125 bg-[#02403c] shadow-xl shadow-black/50 ring-2 ring-white'
+                : 'hover:scale-110 bg-[#006564] shadow-lg border-2 border-white active:scale-105'
             }`}
           >
-            {/* 
-              Oriented pointing horizontally to the right:
-              In Lucide, Plane starts at 45° (top-right).
-              Rotating +45° clockwise points the nose straight to the right (90° / east).
-            */}
             <Plane
-              className="w-8 h-8 text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]"
+              className="w-8 h-8 text-white drop-shadow"
               style={{ transform: 'rotate(45deg)' }}
             />
           </div>

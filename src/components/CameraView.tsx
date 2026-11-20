@@ -304,7 +304,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
         {!hasPermission && (
           <div className="relative w-full h-full flex items-center justify-center">
             <canvas ref={simCanvasRef} className="w-full h-full object-cover" />
-            <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-teal-900/80 backdrop-blur-md border border-teal-500/40 text-teal-200 text-xs flex items-center gap-2">
+            <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-[#013030] border border-teal-800/80 text-teal-100 text-xs flex items-center gap-2 shadow-lg">
               <Camera className="w-3.5 h-3.5" />
               <span>Simulated Camera Viewfinder Active</span>
             </div>
@@ -316,13 +316,16 @@ export const CameraView: React.FC<CameraViewProps> = ({
         )}
 
         {countdown !== null && (
-          <div className="absolute inset-0 flex items-center justify-center z-40 bg-black/50 backdrop-blur-sm">
-            <div className="relative flex items-center justify-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 z-40 bg-black/50 backdrop-blur-sm">
+            <div className="relative flex items-center justify-center" key={countdown}>
               {/* Attention halo — state change, one gentle pulse per digit */}
               <span className="absolute w-32 h-32 rounded-full bg-white/10 animate-ping" />
-              <span className="relative text-9xl font-black text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)] tabular-nums">
+              <span className="relative text-9xl font-black text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)] tabular-nums k-pop">
                 {countdown}
               </span>
+            </div>
+            <div className="px-5 py-2 rounded-full bg-[#013030] border border-teal-800/80 text-teal-100 text-sm font-bold shadow-lg">
+              Say cheese!
             </div>
           </div>
         )}
@@ -336,20 +339,20 @@ export const CameraView: React.FC<CameraViewProps> = ({
 
         {/* Top Info Banner */}
         <div className="absolute top-4 inset-x-0 flex items-center justify-between px-6 z-30">
-          <div className="px-4 py-1.5 rounded-full bg-black/60 backdrop-blur-md text-white text-xs font-semibold flex items-center gap-2 border border-white/20">
+          <div className="px-4 py-1.5 rounded-full bg-[#011b1b] text-white text-xs font-semibold flex items-center gap-2 border border-white/15 shadow-lg">
             <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
             <span>LIVE PREVIEW</span>
           </div>
 
-          <div className="px-4 py-1.5 rounded-full bg-teal-950/80 backdrop-blur-md text-teal-200 text-xs font-bold border border-teal-700/50 flex items-center gap-2">
-            <ImageIcon className="w-3.5 h-3.5 text-teal-400" />
-            <span>{capturedPhotos.length} Photo{capturedPhotos.length === 1 ? '' : 's'} Taken</span>
+          <div className="px-4 py-1.5 rounded-full bg-[#013030] text-teal-100 text-xs font-bold border border-teal-800/80 flex items-center gap-2 shadow-lg">
+            <ImageIcon className="w-3.5 h-3.5 text-teal-300" />
+            <span className="tabular-nums">{capturedPhotos.length} Photo{capturedPhotos.length === 1 ? '' : 's'} Taken</span>
           </div>
         </div>
       </div>
 
       {/* Bottom Shutter & Multi-Photo Control Strip */}
-      <div className="w-full bg-slate-950/95 border-t border-white/10 px-6 py-4 flex flex-col gap-3 z-30">
+      <div className="w-full bg-[#001314] border-t border-teal-900/70 px-6 py-4 flex flex-col gap-3 z-30">
         {capturedPhotos.length > 0 && (
           <div className="flex items-center justify-between gap-4 py-1">
             <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-1">

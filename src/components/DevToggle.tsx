@@ -10,7 +10,7 @@ export const DevToggle: React.FC<{ onEnterDev: () => void }> = ({ onEnterDev }) 
   return (
     <button
       onClick={onEnterDev}
-      className="fixed z-50 flex items-center justify-center w-9 h-9 rounded-full bg-white/5 hover:bg-white/15 active:scale-90 transition-all border border-white/10 text-white/25 hover:text-white/70"
+      className="fixed z-50 flex items-center justify-center w-9 h-9 rounded-full bg-[#012423]/90 hover:bg-[#023a37] active:scale-90 transition-all border border-teal-800/70 text-teal-700 hover:text-teal-200 shadow-lg"
       style={{
         top: 'calc(env(safe-area-inset-top, 0px) + 10px)',
         right: 'calc(env(safe-area-inset-right, 0px) + 10px)',
