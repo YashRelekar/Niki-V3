@@ -4,15 +4,15 @@ import React, { useEffect, useMemo, useState } from 'react';
  * ScrambleText — "decoder ring" load-in for major copy.
  *
  * Letters cycle through random glyphs, then lock in left-to-right until the
- * full word lands. Whitespace (spaces / newlines) is never scrambled, and the
- * animation length is capped so long headlines don't crawl.
+ * full word lands (always the same ~1.6s duration, any length). Whitespace
+ * (spaces / newlines) is never scrambled.
  *
  * Honors prefers-reduced-motion by rendering the final text immediately.
  */
 
-const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789✈✦';
-const TICK_MS = 30;
-const MAX_TICKS = 26; // ~780ms worst case
+const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const TICK_MS = 40;
+const MAX_TICKS = 40; // ≥1.6s to fully land, regardless of string length
 
 function prefersReducedMotion(): boolean {
   return (
@@ -52,10 +52,11 @@ export const ScrambleText: React.FC<ScrambleTextProps> = ({
       let tick = 0;
       timer = window.setInterval(() => {
         tick += 1;
-        // Reveal faster on long strings so total time stays under ~0.8s
-        const perTick = Math.max(1, Math.ceil(total / MAX_TICKS));
-        setRevealed(tick * perTick);
-        if (tick * perTick >= total) {
+        // Reveal as a share of MAX_TICKS so EVERY string takes the full
+        // duration to land, regardless of length.
+        const next = Math.floor((tick / MAX_TICKS) * total);
+        setRevealed(Math.min(total, next));
+        if (next >= total) {
           clearInterval(timer);
           setRevealed(total);
         }

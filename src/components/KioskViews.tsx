@@ -13,7 +13,6 @@ import {
 } from 'lucide-react';
 import { AirplaneSlider } from './AirplaneSlider';
 import { ScrambleText } from './ScrambleText';
-import { FlapBoard } from './FlapBoard';
 import { NikiSpeechService } from '../services/tts';
 import {
   IDLE_SCRIPT,
@@ -412,13 +411,9 @@ export const PrintingView: React.FC<
       </div>
 
         {!isFinished && (
-          <div className="mt-4">
-            <FlapBoard
-              text={getStageDescription()}
-              className="text-xs sm:text-sm font-bold tracking-wider"
-              cellClassName="text-teal-100"
-            />
-          </div>
+          <p className="mt-3 text-teal-200/90 text-xs sm:text-sm font-medium">
+            {getStageDescription()}
+          </p>
         )}
 
       {/* Once Progress Completes: 2 Clear Options for the User */}
@@ -645,13 +640,9 @@ export const PrintSuccessView: React.FC<
       <h1 className="font-bold text-white drop-shadow text-3xl sm:text-4xl md:text-5xl lg:text-6xl k-enter k-d2">
         <ScrambleText text={PRINT_SUCCESS_SCRIPT.headline} delay={180} />
       </h1>
-      <div className="mt-3 max-w-lg px-2 k-enter k-d3">
-        <FlapBoard
-          text={PRINT_SUCCESS_SCRIPT.collectLine}
-          className="text-[10px] sm:text-xs font-bold tracking-wide"
-          cellClassName="text-teal-200"
-        />
-      </div>
+      <p className="mt-3 text-white/90 text-base sm:text-lg md:text-xl font-medium k-enter k-d3">
+        {PRINT_SUCCESS_SCRIPT.collectLine}
+      </p>
 
       <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#013030] border border-teal-800/80 text-teal-100 text-xs sm:text-sm tabular-nums shadow-lg k-enter k-d4">
         <span>{PRINT_SUCCESS_SCRIPT.countdown} <strong>{secondsRemaining}s</strong></span>
