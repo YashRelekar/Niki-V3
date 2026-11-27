@@ -153,6 +153,7 @@ export const MeteorBackground: React.FC<MeteorBackgroundProps> = ({
   return (
     <canvas
       ref={canvasRef}
+      aria-hidden="true"
       className="pointer-events-none absolute inset-0 w-full h-full z-0"
       style={{ opacity }}
     />

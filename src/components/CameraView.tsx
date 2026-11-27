@@ -292,11 +292,11 @@ export const CameraView: React.FC<CameraViewProps> = ({
   const isAnimating = countdown !== null || isCapturing;
 
   return (
-    <div className="relative w-full h-full flex flex-col items-center justify-center gap-6 sm:gap-8 bg-[#006564] overflow-hidden select-none px-4">
-      <canvas ref={canvasRef} className="hidden" />
+    <div className="relative w-full h-full flex flex-col items-center justify-center gap-6 sm:gap-8 bg-brand overflow-hidden select-none px-4">
+      <canvas ref={canvasRef} className="hidden" aria-hidden="true" />
 
       {/* Centered camera window — small video-call frame, white outline */}
-      <div className="relative h-[min(58dvh,500px)] aspect-[4/3] max-w-[94%] rounded-2xl overflow-hidden border-4 border-white shadow-2xl bg-[#001314] k-enter k-d1">
+      <div className="relative h-[min(58dvh,500px)] aspect-[4/3] max-w-[94%] rounded-2xl overflow-hidden border-4 border-white shadow-2xl bg-ground-deep k-enter k-d1">
         <video
           ref={(el) => {
             videoRef.current = el;
@@ -314,17 +314,17 @@ export const CameraView: React.FC<CameraViewProps> = ({
         />
 
         {!hasPermission && (
-          <canvas ref={simCanvasRef} className="w-full h-full object-cover" />
+          <canvas ref={simCanvasRef} className="w-full h-full object-cover" aria-label="Simulated camera preview" />
         )}
 
         {/* LIVE chip on the preview frame */}
         {cameraError && !hasPermission ? (
-          <div className="absolute top-3 left-3 px-3 py-1.5 rounded-full bg-[#013030] border border-teal-800/80 text-teal-100 text-[10px] sm:text-xs font-semibold flex items-center gap-1.5 shadow-lg">
+          <div className="absolute top-3 left-3 px-3 py-1.5 rounded-full bg-brand-deep border border-teal-800/80 text-teal-100 text-[10px] sm:text-xs font-semibold flex items-center gap-1.5 shadow-lg">
             <CameraOff className="w-3.5 h-3.5 text-amber-300" />
             <span>Simulated viewfinder</span>
           </div>
         ) : (
-          <div className="absolute top-3 left-3 px-3 py-1.5 rounded-full bg-[#001314] text-white text-[10px] sm:text-xs font-bold flex items-center gap-1.5 shadow-lg">
+          <div className="absolute top-3 left-3 px-3 py-1.5 rounded-full bg-ground-deep text-white text-[10px] sm:text-xs font-bold flex items-center gap-1.5 shadow-lg">
             <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
             <span>LIVE</span>
           </div>
@@ -353,16 +353,16 @@ export const CameraView: React.FC<CameraViewProps> = ({
               >
                 <circle
                   cx="80" cy="80" r="70" fill="none"
-                  stroke="rgba(255,255,255,0.2)" strokeWidth="6"
+                  stroke="currentColor" strokeWidth="6" className="text-white/20"
                 />
                 <circle
                   cx="80" cy="80" r="70" fill="none"
-                  stroke="#2dd4bf" strokeWidth="6" strokeLinecap="round"
+                  stroke="currentColor" strokeWidth="6" strokeLinecap="round"
                   strokeDasharray="440" strokeDashoffset="440"
-                  className="k-ring"
+                  className="k-ring text-teal-400"
                 />
               </svg>
-              <span className="relative text-8xl font-black text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.9)] tabular-nums k-pop">
+              <span className="relative text-8xl font-black text-white drop-shadow-[0_4px_20px_var(--color-scrim)] tabular-nums k-pop">
                 {countdown}
               </span>
             </div>
@@ -373,7 +373,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
       {/* Encouragement line once a shot exists */}
       <div className="h-5 -mt-2 sm:-mt-3 text-white/85 text-xs sm:text-sm font-medium k-enter">
         {capturedPhotos.length === 0
-          ? 'Ready when you are — press the shutter!'
+          ? 'Ready when you are. Press the shutter!'
           : 'Saved! Take a few more, or tap Next to choose your favourite.'}
       </div>
 
@@ -383,7 +383,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
           <button
             onClick={handleCancel}
             disabled={isAnimating}
-            className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full bg-[#013030] border border-teal-800/80 text-teal-100 text-xs sm:text-sm font-semibold hover:bg-[#02403c] active:scale-[0.97] transition shadow-lg disabled:opacity-50"
+            className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full bg-brand-deep border border-teal-800/80 text-teal-100 text-xs sm:text-sm font-semibold hover:bg-brand-dark active:scale-[0.97] transition shadow-lg disabled:opacity-50"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back</span>
@@ -395,7 +395,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
             onClick={triggerCountdownAndCapture}
             disabled={isAnimating}
             aria-label="Take photo (3-second timer)"
-            className="group relative w-16 h-16 sm:w-20 sm:h-20 rounded-full border-4 border-white bg-white/20 hover:bg-white/40 active:scale-90 transition-all flex items-center justify-center shadow-2xl disabled:opacity-50 disabled:active:scale-100"
+            className="group relative w-16 h-16 sm:w-20 sm:h-20 rounded-full border-4 border-white bg-white/20 hover:bg-white/40 active:scale-90 transition-[transform,background-color] flex items-center justify-center shadow-2xl disabled:opacity-50 disabled:active:scale-100"
           >
             <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-white transition-transform group-hover:scale-90 group-active:scale-75 shadow" />
           </button>
@@ -405,7 +405,7 @@ export const CameraView: React.FC<CameraViewProps> = ({
           <button
             onClick={handleFinish}
             disabled={capturedPhotos.length === 0 || isAnimating}
-            className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full bg-white text-[#006564] text-xs sm:text-sm font-bold hover:bg-white/95 active:scale-[0.97] transition shadow-lg disabled:opacity-50 disabled:hover:bg-white"
+            className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full bg-white text-brand text-xs sm:text-sm font-bold hover:bg-white/95 active:scale-[0.97] transition shadow-lg disabled:opacity-50 disabled:hover:bg-white"
           >
             <span className="tabular-nums">
               Next{capturedPhotos.length > 1 ? ` (${capturedPhotos.length})` : ''}
@@ -417,32 +417,32 @@ export const CameraView: React.FC<CameraViewProps> = ({
 
       {/* Instruction modal — explains the pose timer, dismissible */}
       {showInstructions && (
-        <div className="absolute inset-0 z-[60] flex items-center justify-center bg-[#002626]/95 p-6">
+        <div className="absolute inset-0 z-[60] flex items-center justify-center bg-ground/95 p-6">
           <div className="w-full max-w-md bg-white rounded-2xl p-6 sm:p-8 shadow-2xl k-pop">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-11 h-11 rounded-full bg-[#006564] flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 rounded-full bg-brand flex items-center justify-center shrink-0">
                 <Camera className="w-5 h-5 text-white" />
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-[#013030] leading-tight">
+              <h2 className="text-xl sm:text-2xl font-bold text-brand-deep leading-tight">
                 How to take your photo
               </h2>
             </div>
 
-            <div className="space-y-3 text-[#013030]/90 text-sm sm:text-base leading-relaxed">
+            <div className="space-y-3 text-brand-deep/90 text-sm sm:text-base leading-relaxed">
               <p>
-                When you press the shutter, you'll have{' '}
+                When you press the shutter, you’ll have{' '}
                 <strong>3 seconds</strong> to step back and get into position
                 for the shot.
               </p>
               <p>
-                Take as many photos as you like — you'll{' '}
+                Take as many photos as you like; you’ll{' '}
                 <strong>pick your favourite</strong> on the next screen.
               </p>
             </div>
 
             <button
               onClick={() => setShowInstructions(false)}
-              className="mt-6 w-full py-3.5 rounded-2xl bg-[#006564] text-white font-bold text-base sm:text-lg hover:bg-[#005554] active:scale-[0.97] transition shadow-lg"
+              className="mt-6 w-full py-3.5 rounded-2xl bg-brand text-white font-bold text-base sm:text-lg hover:bg-brand-hover active:scale-[0.97] transition shadow-lg"
             >
               Understood
             </button>

@@ -12,7 +12,7 @@ export const DEFAULT_DEMO_NAME = 'Candbot';
 /** 1. IDLE — sleeping kaomoji + status line. */
 export const IDLE_SCRIPT = {
   kaomoji: '(ᴗ˳ᴗ)ᶻ𝗓𐰁 .ᐟ',
-  status: 'Kiosk Sleeping • Tap anywhere to wake',
+  status: 'Kiosk sleeping\nTap anywhere to wake',
 } as const;
 
 /** 2. DETECT_PRESENCE — first greeting as the flyer approaches. */

@@ -55,15 +55,15 @@ export const PWAInstallModal: React.FC<PWAInstallModalProps> = ({ isOpen, onClos
 
   return (
     <div
-      className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+      className="fixed inset-0 bg-black/70 flex items-center justify-center p-4 z-50"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-md bg-slate-900 border border-teal-800/60 rounded-2xl shadow-2xl text-slate-100 max-h-[85vh] overflow-y-auto"
+        className="relative w-full max-w-md bg-slate-900 border border-teal-800/60 rounded-2xl text-slate-100 max-h-[85vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-5 py-4 flex items-center justify-between">
+        <div className="sticky top-0 bg-slate-900/95 border-b border-slate-800 px-5 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <ShieldCheck className="w-5 h-5 text-teal-400" />
             <div>
@@ -93,7 +93,7 @@ export const PWAInstallModal: React.FC<PWAInstallModalProps> = ({ isOpen, onClos
           <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950/70 border border-slate-800">
             <span className="text-xs font-medium text-slate-300">Connectivity</span>
             <span className={`text-xs font-semibold ${isOnline ? 'text-emerald-300' : 'text-slate-400'}`}>
-              {isOnline ? 'Online' : 'Offline — using local simulator & cache'}
+              {isOnline ? 'Online' : 'Offline, using local simulator & cache'}
             </span>
           </div>
 
@@ -125,7 +125,7 @@ export const PWAInstallModal: React.FC<PWAInstallModalProps> = ({ isOpen, onClos
 
           {installOutcome && (
             <div className="text-[11px] text-teal-300">
-              {installOutcome === 'accepted' ? 'Install prompt accepted — check your home screen.' : 'Install prompt dismissed.'}
+              {installOutcome === 'accepted' ? 'Install prompt accepted. Check your home screen.' : 'Install prompt dismissed.'}
             </div>
           )}
 
@@ -151,7 +151,7 @@ export const PWAInstallModal: React.FC<PWAInstallModalProps> = ({ isOpen, onClos
                 </li>
                 <li className="flex items-center gap-2.5">
                   <span className="w-5 h-5 rounded-full bg-teal-600/30 border border-teal-600/60 text-teal-300 text-[10px] font-bold flex items-center justify-center shrink-0">4</span>
-                  <span>Tap <strong className="text-white">Add</strong> — NIKI Kiosk launches full-screen & offline-capable</span>
+                  <span>Tap <strong className="text-white">Add</strong>: NIKI Kiosk launches full-screen & offline-capable</span>
                 </li>
               </ol>
             </div>

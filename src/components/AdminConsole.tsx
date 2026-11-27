@@ -57,7 +57,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
   };
 
   return (
-    <div className="w-full min-h-full flex flex-col bg-slate-900 text-slate-100 p-4 sm:p-5 rounded-2xl border border-slate-700/60 shadow-2xl font-sans">
+    <div className="w-full min-h-full flex flex-col bg-slate-900 text-slate-100 p-4 sm:p-5 rounded-2xl border border-slate-700/60 font-sans">
       {/* Console Top Header */}
       <div className="flex items-center justify-between pb-3 border-b border-slate-800 shrink-0">
         <div className="flex items-center gap-3">
@@ -110,7 +110,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
         <div className="flex-1 flex flex-col min-h-0 space-y-4">
           {/* Admin Action Buttons matching Admin.swift */}
           <div className="bg-slate-800/50 p-3 rounded-lg border border-slate-800 shrink-0">
-            <div className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-2">
+            <div className="text-sm text-slate-300 font-semibold mb-2">
               Available Admin Decisions
             </div>
             {buttons.length > 0 ? (
@@ -135,15 +135,15 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
 
           {/* Conversation Log matching Admin.swift */}
           <div className="flex-1 min-h-[320px] flex flex-col bg-slate-950/70 rounded-lg p-3 border border-slate-800">
-            <div className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-2 flex items-center justify-between shrink-0">
+            <div className="text-sm text-slate-300 font-semibold mb-2 flex items-center justify-between shrink-0">
               <span className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
                 <span>Event / Conversation Stream</span>
               </span>
-              <span className="text-[10px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded-full font-mono">{rawMessages.length} events</span>
+              <span className="text-xs text-slate-400 bg-slate-800 px-2 py-0.5 rounded-full tabular-nums">{rawMessages.length} events</span>
             </div>
 
-            <div className="flex-1 min-h-[220px] max-h-[500px] overflow-y-auto space-y-2 pr-1 font-mono text-xs">
+            <div className="flex-1 min-h-[220px] max-h-[500px] overflow-y-auto space-y-2 pr-1 text-xs">
               {rawMessages.slice().reverse().map((msg, index) => {
                 const isTool = msg.role === 'tool';
                 const isUser = msg.role === 'user';
@@ -155,7 +155,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
                     className="p-2 rounded-lg bg-slate-900/90 border border-slate-800 flex gap-3 text-slate-200"
                   >
                     <span
-                      className={`w-16 flex-shrink-0 text-[11px] font-bold uppercase ${
+                      className={`w-16 flex-shrink-0 text-xs font-semibold ${
                         isTool
                           ? 'text-amber-400'
                           : isUser
@@ -167,7 +167,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
                     >
                       {msg.role}
                     </span>
-                    <span className="flex-1 break-words text-slate-300">
+                    <span className="flex-1 break-words font-mono text-slate-300">
                       {parseMessageContent(msg)}
                     </span>
                   </div>
@@ -175,7 +175,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
               })}
 
               {rawMessages.length === 0 && (
-                <div className="text-center text-slate-600 py-8">
+                <div className="text-center text-slate-400 py-8">
                   No log events recorded yet.
                 </div>
               )}
@@ -208,7 +208,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
               <Sparkles className="w-4 h-4 text-teal-400" />
               <div>
                 <div className="font-bold text-white">2. Detect Presence</div>
-                <div className="text-[10px] text-slate-400">"Come closer!"</div>
+                <div className="text-[10px] text-slate-400">“Come closer!”</div>
               </div>
             </button>
 
@@ -219,7 +219,7 @@ export const AdminConsole: React.FC<AdminConsoleProps> = ({ statePayload }) => {
               <Activity className="w-4 h-4 text-sky-400" />
               <div>
                 <div className="font-bold text-white">3. Engagement Invite</div>
-                <div className="text-[10px] text-slate-400">"Let's start! / No thanks"</div>
+                <div className="text-[10px] text-slate-400">“Let’s start! / No thanks”</div>
               </div>
             </button>
 

@@ -49,7 +49,7 @@ export const JourneyDots: React.FC<{ state: string }> = ({ state }) => {
         return (
           <span
             key={step}
-            className={`h-2 rounded-full transition-all duration-300 ease-out ${
+            className={`h-2 rounded-full transition-colors duration-300 ease-out ${
               isCurrent
                 ? 'w-6 bg-white shadow-sm'
                 : isPast

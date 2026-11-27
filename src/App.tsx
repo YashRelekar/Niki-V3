@@ -238,14 +238,14 @@ export default function App() {
     // Edge-to-edge fullscreen: mobile-first, no device bezel. Safe-area aware
     // so it fills iPhone (notch/Dynamic Island), iPad, and Android edge-to-edge
     // when launched from the Home Screen.
-    <div className="relative w-screen h-[100dvh] overflow-hidden bg-[#001213] flex flex-col select-none font-sans pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
+    <div className="relative w-screen h-[100dvh] overflow-hidden bg-ground-deep flex flex-col select-none font-sans pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
       {/* MODE 1: USER MODE — clean flyer kiosk experience */}
       {previewMode === 'user' && (
         <>
           {/* Discreet corner Dev Mode toggle (staff only) */}
           <DevToggle onEnterDev={() => setPreviewMode('dev')} />
 
-          <div className="relative w-full flex-1 min-h-0 overflow-hidden flex flex-col bg-[#006564]">
+          <div className="relative w-full flex-1 min-h-0 overflow-hidden flex flex-col bg-brand">
             {/* Cathay Canvas Meteor Shower Background */}
             <MeteorBackground color="#ffffff" opacity={0.4} />
 

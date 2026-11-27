@@ -223,7 +223,7 @@ export const DevModeWorkspace: React.FC<DevModeWorkspaceProps> = ({
           {/* Exit back to fullscreen flyer User Mode */}
           <button
             onClick={onExitDevMode}
-            className="px-2.5 py-1 rounded-xl bg-white hover:bg-white/90 active:scale-95 text-[#006564] font-bold text-xs flex items-center gap-1.5 shadow transition"
+            className="px-2.5 py-1 rounded-xl bg-white hover:bg-white/90 active:scale-95 text-brand font-bold text-xs flex items-center gap-1.5 shadow transition"
             title="Exit Dev / User View"
           >
             <LogOut className="w-3 h-3" />
@@ -269,7 +269,7 @@ export const DevModeWorkspace: React.FC<DevModeWorkspaceProps> = ({
         )}
 
         {subView === 'kiosk' && (
-          <div className="w-full h-full relative bg-[#006564] overflow-hidden flex flex-col">
+          <div className="w-full h-full relative bg-brand overflow-hidden flex flex-col">
             <MeteorBackground color="#ffffff" opacity={0.4} />
             <div className="relative z-10 w-full h-full flex flex-col">
               {renderKioskContent()}
@@ -280,7 +280,7 @@ export const DevModeWorkspace: React.FC<DevModeWorkspaceProps> = ({
         {subView === 'split' && (
           <div className="w-full h-full flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-teal-900/40 overflow-hidden min-h-0 overflow-y-auto md:overflow-hidden">
             {/* Left / Top: Kiosk Screen */}
-            <div className="flex-1 min-h-[360px] relative bg-[#006564] overflow-hidden flex flex-col">
+            <div className="flex-1 min-h-[360px] relative bg-brand overflow-hidden flex flex-col">
               <MeteorBackground color="#ffffff" opacity={0.4} />
               <div className="relative z-10 w-full h-full flex flex-col">
                 {renderKioskContent()}
@@ -347,11 +347,11 @@ export const DevModeWorkspace: React.FC<DevModeWorkspaceProps> = ({
       {/* Quick Photo Modal if thumbnail clicked */}
       {selectedPhoto && (
         <div
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
           onClick={() => setSelectedPhoto(null)}
         >
           <div
-            className="relative max-w-lg w-full bg-slate-900 border border-teal-700 rounded-2xl p-4 shadow-2xl"
+            className="relative max-w-lg w-full bg-slate-900 border border-teal-700 rounded-2xl p-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">

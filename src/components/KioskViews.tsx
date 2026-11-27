@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   Wrench,
   ChevronRight,
+  PartyPopper,
 } from 'lucide-react';
 import { AirplaneSlider } from './AirplaneSlider';
 import { ScrambleText } from './ScrambleText';
@@ -45,7 +46,7 @@ export const IdleView: React.FC<ViewProps & { onWakeUp?: () => void }> = ({
       >
         {IDLE_SCRIPT.kaomoji}
       </div>
-      <p className="mt-6 text-white/60 text-xs sm:text-sm md:text-base tracking-wider uppercase font-medium k-enter k-d2">
+      <p className="mt-6 whitespace-pre-line text-white/85 text-sm sm:text-base md:text-lg font-medium k-enter k-d2">
         {IDLE_SCRIPT.status}
       </p>
     </div>
@@ -68,7 +69,7 @@ export const InitialView: React.FC<ViewProps & { onApproach?: () => void }> = ({
       <h2 className="mt-4 font-normal text-white/90 leading-tight text-2xl sm:text-3xl md:text-4xl lg:text-5xl k-enter k-d2">
         <ScrambleText text={PRESENCE_SCRIPT.sub} delay={160} />
       </h2>
-      <div className="mt-8 flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#013030] border border-teal-800/80 text-teal-100 text-xs sm:text-sm shadow-lg k-enter k-d3">
+      <div className="mt-8 flex items-center gap-2 px-5 py-2.5 rounded-full bg-brand-deep border border-teal-800/80 text-teal-100 text-xs sm:text-sm shadow-lg k-enter k-d3">
         <Sparkles className="w-4 h-4 text-teal-300" />
         <span>{PRESENCE_SCRIPT.cta}</span>
       </div>
@@ -124,7 +125,7 @@ export const InviteView: React.FC<InviteViewProps> = ({
         <button
           onClick={handleStart}
           disabled={loadingNext}
-          className="w-full max-w-xs sm:max-w-sm py-4 px-8 rounded-2xl bg-white text-[#006564] font-bold text-center tracking-wide shadow-2xl hover:bg-white/95 active:scale-[0.97] transition-all flex items-center justify-center gap-3 text-lg sm:text-xl md:text-2xl"
+          className="w-full max-w-xs sm:max-w-sm py-4 px-8 rounded-2xl bg-white text-brand font-bold text-center tracking-wide shadow-2xl hover:bg-white/95 active:scale-[0.97] transition-[transform,background-color] flex items-center justify-center gap-3 text-lg sm:text-xl md:text-2xl"
         >
           <span>{primaryActionTitle}</span>
           <ArrowRight className="w-6 h-6 stroke-[2.5]" />
@@ -220,7 +221,7 @@ export const ImageSelectionView: React.FC<ImageSelectionViewProps> = ({
               <div
                 key={index}
                 onClick={() => setSelectedIndex(index)}
-                className={`relative flex-shrink-0 cursor-pointer rounded-2xl overflow-hidden transition-all duration-200 border-4 ${
+                className={`relative flex-shrink-0 cursor-pointer rounded-2xl overflow-hidden transition-[transform,border-color,opacity] duration-200 border-4 ${
                   isSelected
                     ? 'border-white scale-105 shadow-2xl ring-4 ring-teal-400/80'
                     : 'border-transparent hover:scale-102 opacity-75 hover:opacity-100'
@@ -243,7 +244,7 @@ export const ImageSelectionView: React.FC<ImageSelectionViewProps> = ({
 
                 {/* Selection Checkmark Badge */}
                 {isSelected && (
-                  <div className="absolute top-3 right-3 w-9 h-9 rounded-full bg-[#006564] flex items-center justify-center shadow-lg border-2 border-white k-pop">
+                  <div className="absolute top-3 right-3 w-9 h-9 rounded-full bg-brand flex items-center justify-center shadow-lg border-2 border-white k-pop">
                     <Check className="w-5 h-5 text-white stroke-[3]" />
                   </div>
                 )}
@@ -280,9 +281,9 @@ export const ImageSelectionView: React.FC<ImageSelectionViewProps> = ({
           <button
             onClick={handleSelect}
             disabled={photoURLs.length === 0 || loadingNext}
-            className="py-3 sm:py-3.5 px-6 sm:px-8 rounded-2xl font-bold transition shadow-xl bg-white text-[#006564] hover:bg-white/95 active:scale-[0.97] text-base sm:text-lg md:text-xl flex items-center gap-2 disabled:opacity-50"
+            className="py-3 sm:py-3.5 px-6 sm:px-8 rounded-2xl font-bold transition shadow-xl bg-white text-brand hover:bg-white/95 active:scale-[0.97] text-base sm:text-lg md:text-xl flex items-center gap-2 disabled:opacity-50"
           >
-            <Printer className="w-5 h-5 text-[#006564]" />
+            <Printer className="w-5 h-5 text-brand" />
             <span>Print Photo #<span className="tabular-nums">{selectedIndex + 1}</span></span>
           </button>
         </div>
@@ -361,7 +362,9 @@ export const PrintingView: React.FC<
           <img src={chosenPhoto} alt="Printing preview" className="w-full h-full object-cover" />
           {!isFinished && (
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              <div className="absolute inset-x-0 h-1.5 bg-teal-300 shadow-[0_0_14px_#5eead4] rounded-full animate-niki-sweep" />
+              <div className="absolute inset-0 animate-niki-sweep">
+                <div className="absolute inset-x-0 top-[4%] h-1.5 bg-teal-300 rounded-full" />
+              </div>
             </div>
           )}
           {isFinished && (
@@ -377,7 +380,7 @@ export const PrintingView: React.FC<
           )}
         </div>
       ) : (
-        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#013030] border border-teal-800/60 flex items-center justify-center mb-5 k-enter">
+        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-brand-deep border border-teal-800/60 flex items-center justify-center mb-5 k-enter">
           <Printer className="w-10 h-10 sm:w-12 sm:h-12 text-teal-300" />
         </div>
       )}
@@ -385,13 +388,12 @@ export const PrintingView: React.FC<
       {/* Main Headline */}
       {!isFinished ? (
         <h1 className="font-bold drop-shadow text-3xl sm:text-4xl md:text-5xl text-white">
-          Printing... {progress}%
+          Printing… {progress}%
         </h1>
       ) : (
         <div className="space-y-1">
           <h1 className="font-bold drop-shadow text-3xl sm:text-4xl md:text-5xl text-white flex items-center justify-center gap-2">
             <ScrambleText text={PRINT_SUCCESS_SCRIPT.finishedHeadline} />
-            <span className="text-3xl">🖨️✨</span>
           </h1>
           <p className="text-teal-100 text-base sm:text-lg font-medium">
             {PRINT_SUCCESS_SCRIPT.trayLine}
@@ -401,12 +403,12 @@ export const PrintingView: React.FC<
       {/* Printing Progress Bar */}
       <div className="w-64 sm:w-80 h-3 bg-black/30 rounded-full overflow-hidden mt-4 shadow-inner">
         <div
-          className={`h-full transition-all duration-150 ease-out rounded-full shadow-[0_0_10px_#2dd4bf] ${
+          className={`h-full w-full origin-left transition-transform duration-150 ease-out rounded-full ${
             isFinished
               ? 'bg-gradient-to-r from-teal-300 to-emerald-400'
               : 'bg-gradient-to-r from-teal-300 via-teal-400 to-emerald-400'
           }`}
-          style={{ width: `${progress}%` }}
+          style={{ transform: `scaleX(${progress / 100})` }}
         />
       </div>
 
@@ -418,8 +420,8 @@ export const PrintingView: React.FC<
 
       {/* Once Progress Completes: 2 Clear Options for the User */}
       {isFinished ? (
-        <div className="mt-6 flex flex-col items-center gap-3 w-full max-w-md k-enter k-d2">
-          <div className="text-xs uppercase tracking-wider text-teal-200/90 font-bold">
+        <div className="mt-6 flex flex-col items-center gap-3 w-full max-w-lg k-enter k-d2">
+          <div className="text-sm text-teal-100 font-semibold">
             How does your print look?
           </div>
 
@@ -427,10 +429,10 @@ export const PrintingView: React.FC<
             {/* Option 1: Move on normally */}
             <button
               onClick={() => onDone?.()}
-              className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-white text-[#006564] hover:bg-white/95 font-bold shadow-xl transition active:scale-[0.97] flex items-center justify-center gap-2 text-sm sm:text-base"
+              className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-white text-brand hover:bg-white/95 font-bold shadow-xl transition active:scale-[0.97] flex items-center justify-center gap-2 text-sm sm:text-base"
             >
-              <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-              <span>Photo Received — Move On!</span>
+              <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-600" />
+              <span className="whitespace-nowrap">Photo received, move on!</span>
             </button>
 
             {/* Option 2: Notify robot about Paper Jam */}
@@ -438,12 +440,12 @@ export const PrintingView: React.FC<
               onClick={() => onPaperJam?.()}
               className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-amber-400 text-amber-950 hover:bg-amber-300 font-bold shadow-xl transition active:scale-[0.97] flex items-center justify-center gap-2 text-sm sm:text-base"
             >
-              <AlertTriangle className="w-5 h-5 text-amber-800" />
-              <span>Paper Jammed / Stuck?</span>
+              <AlertTriangle className="w-5 h-5 shrink-0 text-amber-800" />
+              <span className="whitespace-nowrap">Paper Jammed / Stuck?</span>
             </button>
           </div>
 
-          <div className="text-[11px] text-white/60 mt-1 tabular-nums">
+          <div className="text-xs text-white/80 mt-1 tabular-nums">
             Auto-continuing in <strong>{autoAdvanceRemaining}s</strong> if already collected
           </div>
         </div>
@@ -454,7 +456,7 @@ export const PrintingView: React.FC<
               e.stopPropagation();
               setIsFinished(true);
             }}
-            className="mt-6 px-5 py-2 rounded-lg bg-[#013030] hover:bg-[#02403c] border border-teal-800/70 text-teal-100 text-xs sm:text-sm font-medium transition active:scale-[0.97] shadow"
+            className="mt-6 px-5 py-2 rounded-lg bg-brand-deep hover:bg-brand-dark border border-teal-800/70 text-teal-100 text-xs sm:text-sm font-medium transition active:scale-[0.97] shadow"
           >
             Skip to Finish
           </button>
@@ -518,7 +520,7 @@ export const PaperJamRecoveryView: React.FC<
       <div className="w-full max-w-xl mx-auto flex items-center justify-between gap-3 px-4 py-2.5 rounded-2xl bg-amber-400 text-amber-950 shadow-xl k-enter">
         <div className="flex items-center gap-2.5">
           <div className="w-3 h-3 rounded-full bg-amber-900 animate-ping shrink-0" />
-          <span className="text-xs sm:text-sm font-bold uppercase tracking-wider">
+          <span className="text-sm sm:text-base font-bold">
             {PAPER_JAM_SCRIPT.banner}
           </span>
         </div>
@@ -531,8 +533,8 @@ export const PaperJamRecoveryView: React.FC<
       <div className="my-auto flex flex-col items-center text-center max-w-lg w-full k-enter k-d2">
         {/* Animated Printer Mechanical Recovery Visual */}
         <div className="relative mb-4 w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center k-enter">
-          <div className="absolute inset-0 rounded-3xl bg-[#01302c] border-2 border-amber-400/50" />
-          <div className="relative w-20 h-20 rounded-2xl bg-slate-900 border border-amber-400/50 flex items-center justify-center shadow-2xl">
+          <div className="absolute inset-0 rounded-3xl bg-brand-deep border-2 border-amber-400/50" />
+          <div className="relative w-20 h-20 rounded-2xl bg-slate-900 border border-amber-400/50 flex items-center justify-center">
             <Printer className="w-10 h-10 text-amber-300" />
             <RotateCcw className="w-6 h-6 text-teal-300 absolute -top-2 -right-2 animate-spin duration-1000" />
           </div>
@@ -555,8 +557,8 @@ export const PaperJamRecoveryView: React.FC<
             {/* Threaded track + fill, spanning circle centers */}
             <div className="absolute top-7 sm:top-8 left-[12.5%] right-[12.5%] h-1.5 rounded-full bg-black/30 -translate-y-1/2">
               <div
-                className="h-full rounded-full bg-amber-400 shadow-[0_0_8px_#fbbf24] transition-all duration-200 ease-out"
-                style={{ width: `${stageFillPct}%` }}
+                className="h-full w-full origin-left rounded-full bg-amber-400 transition-transform duration-200 ease-out"
+                style={{ transform: `scaleX(${stageFillPct / 100})` }}
               />
             </div>
 
@@ -572,8 +574,8 @@ export const PaperJamRecoveryView: React.FC<
                         isDone
                           ? 'bg-emerald-500 border-white text-white shadow-lg'
                           : isCurrent
-                          ? 'bg-amber-400 border-white text-amber-950 shadow-[0_0_16px_rgba(251,191,36,0.6)] scale-105'
-                          : 'bg-[#013030] border-teal-700/70 text-teal-200/70'
+                          ? 'bg-amber-400 border-white text-amber-950 shadow-lg scale-105'
+                          : 'bg-brand-deep border-teal-700/70 text-teal-200/70'
                       }`}
                     >
                       {isDone ? (
@@ -650,12 +652,12 @@ export const PrintSuccessView: React.FC<
       onClick={onFinish}
       className="w-full h-full flex flex-col items-center justify-center text-center p-6 sm:p-8 select-none cursor-pointer"
     >
-      <div className="text-4xl sm:text-5xl mb-3 k-pop">{PRINT_SUCCESS_SCRIPT.emoji}</div>
+      <PartyPopper aria-hidden="true" className="w-12 h-12 sm:w-14 sm:h-14 mb-3 text-teal-100 k-pop" />
 
       {chosenPhoto && (
         <div className="relative mb-4 w-48 h-36 sm:w-60 sm:h-44 rounded-2xl overflow-hidden border-4 border-white shadow-2xl p-1 bg-white k-enter k-d1">
           <img src={chosenPhoto} alt="Souvenir photo" className="w-full h-full object-cover rounded-xl" />
-          <div className="absolute bottom-2 inset-x-2 bg-[#006564] py-1 text-[11px] font-bold text-white rounded-lg shadow">
+          <div className="absolute bottom-2 inset-x-2 bg-brand py-1 text-[11px] font-bold text-white rounded-lg shadow">
             {PRINT_SUCCESS_SCRIPT.badge}
           </div>
         </div>
@@ -668,9 +670,8 @@ export const PrintSuccessView: React.FC<
         {PRINT_SUCCESS_SCRIPT.collectLine}
       </p>
 
-      <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#013030] border border-teal-800/80 text-teal-100 text-xs sm:text-sm tabular-nums shadow-lg k-enter k-d4">
+      <div className="mt-6 inline-flex items-center gap-3 px-4 py-2 rounded-full bg-brand-deep border border-teal-800/80 text-teal-100 text-xs sm:text-sm tabular-nums shadow-lg k-enter k-d4">
         <span>{PRINT_SUCCESS_SCRIPT.countdown} <strong>{secondsRemaining}s</strong></span>
-        <span className="text-teal-800">•</span>
         <span className="text-teal-200/80">{PRINT_SUCCESS_SCRIPT.tapToFinish}</span>
       </div>
     </div>
@@ -695,7 +696,7 @@ export const GoodbyeView: React.FC<ViewProps & { onComplete?: () => void }> = ({
       onClick={onComplete}
       className="w-full h-full flex flex-col items-center justify-center text-center p-6 sm:p-8 select-none cursor-pointer"
     >
-      <div className="text-4xl sm:text-5xl mb-4 k-enter k-d1">{GOODBYE_SCRIPT.emoji}</div>
+      <Plane aria-hidden="true" className="w-12 h-12 sm:w-14 sm:h-14 mb-4 text-teal-100 k-enter k-d1" />
 
       <h1 className="font-bold text-white drop-shadow text-3xl sm:text-4xl md:text-5xl k-enter k-d2">
         <ScrambleText text={GOODBYE_SCRIPT.headline} delay={140} />

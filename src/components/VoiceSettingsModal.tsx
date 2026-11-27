@@ -98,8 +98,8 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
   const otherVoices = voices.filter((v) => !v.isFeminine);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="bg-slate-900 border border-slate-700 w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden text-slate-100 font-sans">
+    <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+      <div className="bg-slate-900 border border-slate-700 w-full max-w-2xl rounded-2xl flex flex-col max-h-[90vh] overflow-hidden text-slate-100 font-sans">
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-slate-800 bg-slate-950/70">
           <div className="flex items-center gap-3">
@@ -108,13 +108,13 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-xl font-bold text-white">Niki's Feminine Voice Profile</h3>
+                <h3 className="text-xl font-bold text-white">Niki’s Feminine Voice Profile</h3>
                 <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30">
                   Feminine / Female
                 </span>
               </div>
               <p className="text-xs text-slate-400">
-                Choose Niki's vocal tone, pitch, and voice synthesis personality
+                Choose Niki’s vocal tone, pitch, and voice synthesis personality
               </p>
             </div>
           </div>
@@ -131,7 +131,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {/* 1. Feminine Persona Presets */}
           <div>
-            <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-3">
+            <label className="text-sm font-semibold text-slate-300 block mb-3">
               1. Feminine Persona Presets
             </label>
             <div className="grid grid-cols-2 gap-3">
@@ -185,7 +185,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
                       </div>
                       <p className="text-[11px] text-slate-400 leading-snug">{p.desc}</p>
                     </div>
-                    <div className="mt-2 text-[10px] font-semibold text-teal-300 uppercase">
+                    <div className="mt-2 text-xs font-semibold text-teal-300">
                       {p.badge}
                     </div>
                   </button>
@@ -197,7 +197,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
           {/* 2. System Feminine Voice Engine Selection */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <label className="text-sm font-semibold text-slate-300">
                 2. Specifically Requested Voices
               </label>
               <span className="text-[11px] text-teal-300 font-medium">Google UK English Female & Samantha</span>
@@ -224,7 +224,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
                   >
                     <div>
                       <div className="font-bold text-xs flex items-center gap-1.5">
-                        <span>🇬🇧 Google UK Female</span>
+                        <span>Google UK Female</span>
                       </div>
                       <div className="text-[10px] text-slate-400 mt-0.5">
                         {googleVoice ? 'Detected & Available' : 'Not installed in browser'}
@@ -258,7 +258,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
                   >
                     <div>
                       <div className="font-bold text-xs flex items-center gap-1.5">
-                        <span>🍎 Samantha (Apple)</span>
+                        <span>Samantha (Apple)</span>
                       </div>
                       <div className="text-[10px] text-slate-400 mt-0.5">
                         {samanthaVoice ? 'Detected & Available' : 'Not installed in browser'}
@@ -282,7 +282,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
               <optgroup label="✨ Detected Feminine Voices">
                 {feminineVoices.map((v) => (
                   <option key={v.voiceURI} value={v.voiceURI}>
-                    🌸 {v.name} ({v.lang})
+                    {v.name} ({v.lang})
                   </option>
                 ))}
               </optgroup>
@@ -300,7 +300,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
 
           {/* 3. Fine-tuning sliders */}
           <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700/60 space-y-4">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-300">
+            <div className="flex items-center gap-2 text-sm font-semibold text-slate-300">
               <Sliders className="w-4 h-4 text-teal-400" />
               <span>Voice Pitch & Speed Fine-Tuning</span>
             </div>
@@ -309,7 +309,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
             <div>
               <div className="flex justify-between text-xs text-slate-300 mb-1">
                 <span>Vocal Pitch (Feminine frequency)</span>
-                <span className="font-mono text-teal-400 font-bold">{pitch.toFixed(2)}x</span>
+                <span className="tabular-nums text-teal-400 font-bold">{pitch.toFixed(2)}x</span>
               </div>
               <input
                 type="range"
@@ -331,7 +331,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
             <div>
               <div className="flex justify-between text-xs text-slate-300 mb-1">
                 <span>Speaking Rate (Speed)</span>
-                <span className="font-mono text-teal-400 font-bold">{rate.toFixed(2)}x</span>
+                <span className="tabular-nums text-teal-400 font-bold">{rate.toFixed(2)}x</span>
               </div>
               <input
                 type="range"
@@ -359,7 +359,7 @@ export const VoiceSettingsModal: React.FC<VoiceSettingsModalProps> = ({
             className="px-4 py-2.5 rounded-lg bg-teal-600/30 hover:bg-teal-600/50 text-teal-200 border border-teal-500/40 text-xs font-bold flex items-center gap-2 transition active:scale-95 disabled:opacity-50"
           >
             <Play className={`w-3.5 h-3.5 fill-current ${isPlaying ? 'animate-pulse' : ''}`} />
-            <span>{isPlaying ? 'Speaking Sample...' : 'Test Niki’s Voice'}</span>
+            <span>{isPlaying ? 'Speaking sample…' : 'Test Niki’s Voice'}</span>
           </button>
 
           <div className="flex items-center gap-3">

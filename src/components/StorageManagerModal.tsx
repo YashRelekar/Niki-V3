@@ -61,8 +61,8 @@ export const StorageManagerModal: React.FC<StorageManagerModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-slate-900 border border-slate-700 w-full max-w-4xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] overflow-hidden text-slate-100">
+    <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
+      <div className="bg-slate-900 border border-slate-700 w-full max-w-4xl rounded-2xl flex flex-col max-h-[90vh] overflow-hidden text-slate-100">
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-slate-800">
           <div className="flex items-center gap-3">
@@ -129,7 +129,7 @@ export const StorageManagerModal: React.FC<StorageManagerModalProps> = ({
           {/* Stored Photos Gallery */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-sm font-semibold text-white tracking-wide uppercase">
+              <h4 className="text-sm font-semibold text-white">
                 Captured Photos in Local Storage
               </h4>
               <span className="text-xs text-slate-400">{photos.length} items</span>
@@ -171,7 +171,7 @@ export const StorageManagerModal: React.FC<StorageManagerModalProps> = ({
 
           {/* Sync Queue Table */}
           <div>
-            <h4 className="text-sm font-semibold text-white tracking-wide uppercase mb-3">
+            <h4 className="text-sm font-semibold text-white mb-3">
               Offline Action Sync Queue
             </h4>
             {queue.length === 0 ? (

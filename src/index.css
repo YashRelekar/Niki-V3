@@ -1,4 +1,41 @@
+/* Hallmark · checked: 2026-11-27 · genre: atmospheric (inferred) · shape: app screen
+ * floor: 0 FAIL (was 77) · reflex: 0 open, 1 waived (28b) · fixed: 10a, 19, 29, 30a, 33, 40, 48, 63, 64, 67, F1, F2, F24
+ * built: the project · redesign: polish · v2.0.0 */
+/* Hallmark · dismissed 74 · slate and teal utilities are the project's own staff-console palette, found at pre-flight */
+/* Hallmark · dismissed 49 · admin stepper buttons are two-line title and description cards by design */
+/* Hallmark · waive 28b · a live getUserMedia stream, not a file and not the LCP · the guest's own camera face fills this frame, so no poster still exists */
 @import "tailwindcss";
+
+/* Tokens: brand surfaces, faces and shared shadows (Tailwind v4 theme) */
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-brand: #006564;        /* Cathay teal, the kiosk canvas */
+  --color-brand-hover: #005554;  /* pressed and hovered brand fill */
+  --color-brand-dark: #02403c;   /* raised control on the canvas */
+  --color-brand-deep: #013030;   /* chips, flap cells, deep panels */
+  --color-ground: #002626;       /* page ground behind the kiosk */
+  --color-ground-deep: #001314;  /* camera well, outer shell */
+  --color-ground-raised: #023a37;
+  --color-flap-ink: #ccfbf1;
+  --color-focus: #5eead4;
+  --color-scrim: rgb(0 19 20 / 0.9);
+  --color-edge-shade: rgb(0 0 0 / 0.45);
+  --color-scroll-track: rgb(15 23 42 / 0.6);
+  --color-scroll-thumb: rgb(71 85 105 / 0.8);
+  --color-scroll-thumb-hover: rgb(20 184 166 / 0.9);
+}
+
+@layer base {
+  html, body { overflow-x: clip; }
+  /* One instant focus ring for every control */
+  :where(button, a, input, select, textarea, summary, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+  ::selection { background: var(--color-focus); color: var(--color-ground); }
+}
 
 /*
   NIKI Kiosk design tokens
@@ -59,10 +96,10 @@
 .flap-cell {
   min-width: 1ch;
   padding: 0.1em 0.22em 0.14em;
-  background: #013030;
+  background: var(--color-brand-deep);
   border-radius: 3px;
-  color: #ccfbf1;
-  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.45);
+  color: var(--color-flap-ink);
+  box-shadow: inset 0 -1px 0 var(--color-edge-shade);
   animation: niki-flap 0.55s cubic-bezier(0.23, 1, 0.32, 1) both;
   backface-visibility: hidden;
 }
@@ -73,7 +110,7 @@
   right: 0;
   top: 50%;
   height: 1px;
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--color-edge-shade);
 }
 
 /* Shutter countdown ring: one full sweep per second (re-keyed per digit) */
@@ -90,16 +127,18 @@
 }
 .k-flash { animation: niki-flash 0.25s ease-out both; }
 
-/* ── Ambient state motion ── */@keyframes niki-breathe {
+/* ── Ambient state motion ── */
+@keyframes niki-breathe {
   0%, 100% { transform: scale(1); }
   50%      { transform: scale(1.03); }
 }
 .animate-niki-breathe { animation: niki-breathe 4.5s ease-in-out infinite; }
 
+/* Applied to a full-height wrapper, so translateY % tracks the frame height */
 @keyframes niki-sweep {
-  0%   { top: 4%; }
-  50%  { top: 92%; }
-  100% { top: 4%; }
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(88%); }
+  100% { transform: translateY(0); }
 }
 .animate-niki-sweep { animation: niki-sweep 1.4s ease-in-out infinite; }
 
@@ -109,15 +148,15 @@
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.6);
+  background: var(--color-scroll-track);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(71, 85, 105, 0.8);
+  background: var(--color-scroll-thumb);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(20, 184, 166, 0.9);
+  background: var(--color-scroll-thumb-hover);
 }
 
 /* Respect Reduce Motion: all choreographed and ambient motion collapses. */

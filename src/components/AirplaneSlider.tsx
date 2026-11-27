@@ -63,7 +63,7 @@ export const AirplaneSlider: React.FC<AirplaneSliderProps> = ({
           style={{ left: `${pct}%` }}
         />
         <div
-          className="absolute left-0 h-[7px] top-1/2 -translate-y-1/2 bg-teal-300 rounded-full shadow-[0_0_8px_rgba(45,212,191,0.6)]"
+          className="absolute left-0 h-[7px] top-1/2 -translate-y-1/2 bg-teal-300 rounded-full"
           style={{ width: `${pct}%` }}
         />
 
@@ -73,10 +73,10 @@ export const AirplaneSlider: React.FC<AirplaneSliderProps> = ({
           style={{ left: `${pct}%` }}
         >
           <div
-            className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-150 ${
+            className={`w-12 h-12 rounded-full flex items-center justify-center transition-[transform,background-color,box-shadow] duration-150 ${
               isDragging
-                ? 'scale-125 bg-[#02403c] shadow-xl shadow-black/50 ring-2 ring-white'
-                : 'hover:scale-110 bg-[#006564] shadow-lg border-2 border-white active:scale-105'
+                ? 'scale-125 bg-brand-dark shadow-xl shadow-black/50 ring-2 ring-white'
+                : 'hover:scale-110 bg-brand shadow-lg border-2 border-white active:scale-105'
             }`}
           >
             <Plane
