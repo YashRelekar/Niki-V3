@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
  * ScrambleText — "decoder ring" load-in for major copy.
  *
  * Letters cycle through random glyphs, then lock in left-to-right until the
- * full word lands (always the same ~1.0s duration, any length). Whitespace
+ * full word lands (always the same ~0.5s duration, any length). Whitespace
  * (spaces / newlines) is never scrambled.
  *
  * Honors prefers-reduced-motion by rendering the final text immediately.
@@ -12,7 +12,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 const GLYPHS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 const TICK_MS = 25;
-const MAX_TICKS = 40; // 1.0s to fully land, regardless of string length
+const MAX_TICKS = 20; // 0.5s to fully land, regardless of string length
 
 function prefersReducedMotion(): boolean {
   return (
