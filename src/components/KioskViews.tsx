@@ -326,23 +326,27 @@ export const PrintingView: React.FC<
     };
   }, []);
 
-  // When printing finishes, start auto-advance countdown if user doesn't press anything
+  // Latest onDone without restarting the countdown when the parent re-renders
+  const onDoneRef = useRef(onDone);
+  useEffect(() => {
+    onDoneRef.current = onDone;
+  });
+
+  // When printing finishes, start auto-advance countdown if user doesn't press anything.
+  // The updater stays pure; the parent callback fires from an effect, not during render.
   useEffect(() => {
     if (!isFinished) return;
 
     const timer = setInterval(() => {
-      setAutoAdvanceRemaining((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          onDone?.();
-          return 0;
-        }
-        return prev - 1;
-      });
+      setAutoAdvanceRemaining((prev) => Math.max(0, prev - 1));
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isFinished, onDone]);
+  }, [isFinished]);
+
+  useEffect(() => {
+    if (isFinished && autoAdvanceRemaining === 0) onDoneRef.current?.();
+  }, [isFinished, autoAdvanceRemaining]);
 
   // Stage description based on print percentage
   const getStageDescription = () => {
@@ -632,20 +636,24 @@ export const PrintSuccessView: React.FC<
 > = ({ deviceIdiom = 'pad', chosenPhoto, onFinish }) => {
   const [secondsRemaining, setSecondsRemaining] = useState(5);
 
+  // Latest onFinish without restarting the countdown when the parent re-renders
+  const onFinishRef = useRef(onFinish);
+  useEffect(() => {
+    onFinishRef.current = onFinish;
+  });
+
+  // The updater stays pure; the parent callback fires from an effect, not during render.
   useEffect(() => {
     const interval = setInterval(() => {
-      setSecondsRemaining((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          onFinish?.();
-          return 0;
-        }
-        return prev - 1;
-      });
+      setSecondsRemaining((prev) => Math.max(0, prev - 1));
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [onFinish]);
+  }, []);
+
+  useEffect(() => {
+    if (secondsRemaining === 0) onFinishRef.current?.();
+  }, [secondsRemaining]);
 
   return (
     <div
@@ -683,13 +691,19 @@ export const GoodbyeView: React.FC<ViewProps & { onComplete?: () => void }> = ({
   deviceIdiom = 'pad',
   onComplete,
 }) => {
+  // Latest onComplete without resetting the 2.5s timer when the parent re-renders
+  const onCompleteRef = useRef(onComplete);
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  });
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      onComplete?.();
+      onCompleteRef.current?.();
     }, 2500);
 
     return () => clearTimeout(timer);
-  }, [onComplete]);
+  }, []);
 
   return (
     <div
